@@ -80,6 +80,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.get('/api', (req, res) => {
+  res.json({
+    app: 'PARVAII Atelier Brand ERP Backend',
+    version: '1.0.0 (Node.js + Express)',
+    database: 'MongoDB Atlas',
+    endpoints: '/api/v1/'
+  });
+});
+
 app.get('/', (req, res) => {
   res.json({
     app: 'PARVAII Atelier Brand ERP Backend',
