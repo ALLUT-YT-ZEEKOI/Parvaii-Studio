@@ -10,6 +10,9 @@
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev"
   },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
