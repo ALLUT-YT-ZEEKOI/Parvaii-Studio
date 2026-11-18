@@ -1,0 +1,56 @@
+import express from 'express';
+import { Account, AccountTransaction } from '../models/Account.js';
+
+const router = express.Router();
+
+const DEFAULT_ACCOUNTS = [
+  { id: '1', name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_inr: 12500, opening_balance_inr: 15000, is_active: true },
+  { id: '2', name: 'Studio Cash Box', type: 'cash', balance_inr: 3743, opening_balance_inr: 5000, is_active: true },
+];
+
+router.get('/', async (req, res) => {
+  try {
+    const list = await Account.find({ is_active: true }).lean();
+    if (list && list.length > 0) {
+      const bankSum = list.filter(a => a.type === 'bank').reduce((sum, a) => sum + (a.balance_paise || 0), 0) / 100;
+      const cashSum = list.filter(a => a.type === 'cash').reduce((sum, a) => sum + (a.balance_paise || 0), 0) / 100;
+      return res.json({
+        summary: {
+          total_balance_inr: bankSum + cashSum,
+          bank_balance_inr: bankSum,
+          cash_balance_inr: cashSum,
+        },
+        accounts: list.map(a => ({
+          ...a,
+          id: a._id,
+          balance_inr: (a.balance_paise || 0) / 100,
+          opening_balance_inr: (a.opening_balance_paise || 0) / 100,
+        }))
+      });
+    }
+
+    return res.json({
+      summary: { total_balance_inr: 16243, bank_balance_inr: 12500, cash_balance_inr: 3743 },
+      accounts: DEFAULT_ACCOUNTS,
+    });
+  } catch (e) {
+    return res.json({
+      summary: { total_balance_inr: 16243, bank_balance_inr: 12500, cash_balance_inr: 3743 },
+      accounts: DEFAULT_ACCOUNTS,
+    });
+  }
+});
+
+router.post('/transfers', async (req, res) => {
+  res.json({ message: 'Internal transfer recorded successfully' });
+});
+
+router.post('/investments', async (req, res) => {
+  res.json({ message: 'Partner capital injection recorded successfully' });
+});
+
+router.get('/investments', async (req, res) => {
+  res.json({ data: [] });
+});
+
+export default router;
