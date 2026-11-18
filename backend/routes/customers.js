@@ -13,20 +13,17 @@ const DEFAULT_CUSTOMERS = [
 
 router.get('/', async (req, res) => {
   try {
-    const list = await Customer.find().sort({ total_orders: -1 }).lean();
-    if (list && list.length > 0) {
-      return res.json({
-        data: list.map(c => ({
-          ...c,
-          id: c._id,
-          total_spent_inr: (c.total_spent_paise || 0) / 100,
-          outstanding_inr: (c.outstanding_paise || 0) / 100,
-        }))
-      });
-    }
-    return res.json({ data: DEFAULT_CUSTOMERS });
+    const list = await Customer.find().sort({ total_orders: -1 }).lean().catch(() => []);
+    return res.json({
+      data: list.map(c => ({
+        ...c,
+        id: c._id,
+        total_spent_inr: (c.total_spent_paise || 0) / 100,
+        outstanding_inr: (c.outstanding_paise || 0) / 100,
+      }))
+    });
   } catch (e) {
-    return res.json({ data: DEFAULT_CUSTOMERS });
+    return res.json({ data: [] });
   }
 });
 

@@ -268,19 +268,65 @@ router.get('/', async (req, res) => {
       });
     }
 
-    // High fidelity fallback when connecting or seeding
-    if (activeDrop === 'Drop 01') {
-      return res.json(DROP_01_FALLBACK);
-    }
-    if (activeDrop === 'Drop 02') {
-      return res.json(DROP_02_FALLBACK);
-    }
-    return res.json(ALL_DROPS_FALLBACK);
+    // Clean dynamic empty state when database has no records yet
+    return res.json({
+      active_drop: activeDrop,
+      kpis: {
+        total_sales_inr: 0,
+        total_sales_growth: '0%',
+        total_expenses_inr: 0,
+        total_expenses_growth: '0%',
+        net_profit_inr: 0,
+        net_profit_growth: '0%',
+        company_balance_inr: 0,
+        bank_balance_inr: 0,
+        cash_balance_inr: 0,
+        refunded_amount_inr: 0,
+        stock_in_hand_pieces: 0,
+        pending_reimbursements_inr: 0,
+        pending_reimbursement_members: 0,
+      },
+      sales_expenses_trend: [],
+      order_status: {
+        total_orders: 0,
+        breakdown: { sold: 0, processing: 0, pending: 0, cancelled: 0 },
+      },
+      recent_orders: [],
+      low_stock_alerts: [],
+      customer_overview: {
+        total_customers: 0,
+        repeat_customers: 0,
+        birthdays_this_week: 0,
+        avg_order_value_inr: 0,
+      },
+      featured_birthday: null,
+    });
   } catch (err) {
     console.error('[Dashboard Error]', err);
-    if (norm.includes('01')) return res.json(DROP_01_FALLBACK);
-    if (norm.includes('02')) return res.json(DROP_02_FALLBACK);
-    return res.json(ALL_DROPS_FALLBACK);
+    return res.json({
+      active_drop: 'All Drops',
+      kpis: {
+        total_sales_inr: 0,
+        total_sales_growth: '0%',
+        total_expenses_inr: 0,
+        total_expenses_growth: '0%',
+        net_profit_inr: 0,
+        net_profit_growth: '0%',
+        company_balance_inr: 0,
+        bank_balance_inr: 0,
+        cash_balance_inr: 0,
+        refunded_amount_inr: 0,
+        stock_in_hand_pieces: 0,
+        pending_reimbursements_inr: 0,
+        pending_reimbursement_members: 0,
+      },
+      sales_expenses_trend: [],
+      order_status: { total_orders: 0, breakdown: { sold: 0, processing: 0, pending: 0, cancelled: 0 } },
+      recent_orders: [],
+      low_stock_alerts: [],
+      customer_overview: { total_customers: 0, repeat_customers: 0, birthdays_this_week: 0, avg_order_value_inr: 0 },
+      featured_birthday: null,
+    });
   }
 });
 

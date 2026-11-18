@@ -11,15 +11,12 @@ const DEFAULT_COLLECTIONS = [
 router.get('/', async (req, res) => {
   try {
     const list = await Collection.find().sort({ createdAt: -1 }).lean();
-    if (list && list.length > 0) {
-      return res.json(list.map(c => ({
-        ...c,
-        id: c._id,
-      })));
-    }
-    return res.json(DEFAULT_COLLECTIONS);
+    return res.json(list.map(c => ({
+      ...c,
+      id: c._id,
+    })));
   } catch (e) {
-    return res.json(DEFAULT_COLLECTIONS);
+    return res.json([]);
   }
 });
 

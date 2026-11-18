@@ -7,7 +7,7 @@ import { getExpensesForDrop } from '../services/dropData';
 
 export const ExpensesPage: React.FC = () => {
   const { setIsAddExpenseOpen, activeCollection, setActiveCollection } = useAuth();
-  const [expenses, setExpenses] = useState<Expense[]>(() => getExpensesForDrop(activeCollection));
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [fundingFilter, setFundingFilter] = useState('all');
   const [search, setSearch] = useState('');
 
@@ -16,25 +16,22 @@ export const ExpensesPage: React.FC = () => {
   }, [fundingFilter, activeCollection]);
 
   const loadExpenses = () => {
-    const fallback = getExpensesForDrop(activeCollection);
-    setExpenses(fallback);
-
     const params: Record<string, string> = {};
     if (fundingFilter !== 'all') params.funding_source = fundingFilter;
     if (activeCollection && activeCollection !== 'All Drops') params.collection_id = activeCollection;
 
     api.get('/expenses', { params })
       .then((res) => {
-        if (res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        if (res.data?.data && Array.isArray(res.data.data)) {
           setExpenses(res.data.data);
-        } else if (Array.isArray(res.data) && res.data.length > 0) {
+        } else if (Array.isArray(res.data)) {
           setExpenses(res.data);
         } else {
-          setExpenses(fallback);
+          setExpenses([]);
         }
       })
       .catch(() => {
-        setExpenses(fallback);
+        setExpenses([]);
       });
   };
 
@@ -237,7 +234,16 @@ export const ExpensesPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filtered.map((exp) => (
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-slate-400">
+                    <CreditCard className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                    <p className="font-semibold text-slate-600">No expenses recorded yet</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Click "+ Add Expense" to record production or operational costs</p>
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((exp) => (
                 <tr key={exp.id} className="hover:bg-slate-50/60 transition-colors">
                   <td className="py-3 px-4 font-bold text-[#0B162A]">{exp.expense_number}</td>
                   <td className="py-3 px-4 text-slate-500 whitespace-nowrap">{exp.expense_date}</td>
@@ -284,7 +290,7 @@ export const ExpensesPage: React.FC = () => {
                     )}
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

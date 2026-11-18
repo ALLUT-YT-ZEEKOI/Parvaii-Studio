@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Persistent Drop Selection across all pages and reloads
   const [activeCollection, setActiveCollectionState] = useState<string>(() => {
-    return localStorage.getItem('parvaii_active_drop') || 'Drop 01';
+    return localStorage.getItem('parvaii_active_drop') || 'All Drops';
   });
 
   // Date range defaults to full drop lifespan so historical drops show complete metrics
@@ -70,12 +70,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const saved = localStorage.getItem('parvaii_collections');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
       // ignore
     }
-    return DEFAULT_COLLECTIONS;
+    return [];
   });
 
   const setActiveCollection = (drop: string) => {
@@ -94,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refreshCollections = async () => {
     try {
       const res = await api.get('/collections');
-      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      if (res.data && Array.isArray(res.data)) {
         setCollections(res.data);
         localStorage.setItem('parvaii_collections', JSON.stringify(res.data));
       }

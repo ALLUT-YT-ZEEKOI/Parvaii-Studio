@@ -1,4 +1,10 @@
 import express from 'express';
+import { Order } from '../models/Order.js';
+import { Expense } from '../models/Expense.js';
+import { Product } from '../models/Product.js';
+import { Customer } from '../models/Customer.js';
+import { Reimbursement } from '../models/Reimbursement.js';
+import { Collection } from '../models/Collection.js';
 
 const router = express.Router();
 
@@ -26,6 +32,36 @@ router.post('/', (req, res) => {
 
 router.get('/audit-logs', (req, res) => {
   res.json({ data: [] });
+});
+
+// Clear all demo data from database
+router.post('/clear-database', async (req, res) => {
+  try {
+    const [orders, expenses, products, customers, reimbursements, collections] = await Promise.all([
+      Order.deleteMany({}),
+      Expense.deleteMany({}),
+      Product.deleteMany({}),
+      Customer.deleteMany({}),
+      Reimbursement.deleteMany({}),
+      Collection.deleteMany({}),
+    ]);
+
+    return res.json({
+      success: true,
+      message: 'Demo database cleared successfully! Ready for your real studio data.',
+      deleted: {
+        orders: orders.deletedCount,
+        expenses: expenses.deletedCount,
+        products: products.deletedCount,
+        customers: customers.deletedCount,
+        reimbursements: reimbursements.deletedCount,
+        collections: collections.deletedCount,
+      }
+    });
+  } catch (err) {
+    console.error('[Clear Database Error]', err);
+    return res.status(500).json({ error: 'Failed to clear database', message: err.message });
+  }
 });
 
 export default router;

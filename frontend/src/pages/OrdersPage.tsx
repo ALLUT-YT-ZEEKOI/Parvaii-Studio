@@ -7,7 +7,7 @@ import { getOrdersForDrop } from '../services/dropData';
 
 export const OrdersPage: React.FC = () => {
   const { setIsNewOrderOpen, setIsReceivePaymentOpen, activeCollection, setActiveCollection } = useAuth();
-  const [orders, setOrders] = useState<Order[]>(() => getOrdersForDrop(activeCollection));
+  const [orders, setOrders] = useState<Order[]>([]);
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -17,26 +17,22 @@ export const OrdersPage: React.FC = () => {
   }, [statusFilter, activeCollection]);
 
   const loadOrders = () => {
-    // Immediately show active drop's orders
-    const fallback = getOrdersForDrop(activeCollection);
-    setOrders(fallback);
-
     const params: Record<string, string> = {};
     if (statusFilter !== 'all') params.status = statusFilter;
     if (activeCollection && activeCollection !== 'All Drops') params.collection_id = activeCollection;
 
     api.get('/orders', { params })
       .then((res) => {
-        if (res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        if (res.data?.data && Array.isArray(res.data.data)) {
           setOrders(res.data.data);
-        } else if (Array.isArray(res.data) && res.data.length > 0) {
+        } else if (Array.isArray(res.data)) {
           setOrders(res.data);
         } else {
-          setOrders(fallback);
+          setOrders([]);
         }
       })
       .catch(() => {
-        setOrders(fallback);
+        setOrders([]);
       });
   };
 
@@ -304,7 +300,16 @@ export const OrdersPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredOrders.map((order) => (
+              {filteredOrders.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-slate-400">
+                    <ShoppingBag className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                    <p className="font-semibold text-slate-600">No orders recorded yet</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Click "+ New Order" to record your first studio sale</p>
+                  </td>
+                </tr>
+              ) : (
+                filteredOrders.map((order) => (
                 <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
                   <td className="py-3 px-4 font-bold text-[#0B162A]">
                     {order.order_number}
@@ -377,7 +382,7 @@ export const OrdersPage: React.FC = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

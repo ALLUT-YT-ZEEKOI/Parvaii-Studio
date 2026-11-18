@@ -225,29 +225,10 @@ router.get('/', async (req, res) => {
       filter.collection_name = new RegExp(collectionId, 'i');
     }
 
-    const list = await Order.find(filter).sort({ order_date: -1 }).lean();
-    if (list && list.length > 0) {
-      return res.json({ data: list.map(o => ({ ...o, id: o._id })) });
-    }
-
-    // Fallback matching drop
-    let result = [];
-    if (norm.includes('01') || norm.includes('drop 1')) {
-      result = DROP_01_ORDERS;
-    } else if (norm.includes('02') || norm.includes('drop 2')) {
-      result = DROP_02_ORDERS;
-    } else {
-      result = [...DROP_02_ORDERS, ...DROP_01_ORDERS];
-    }
-
-    if (status !== 'all') {
-      result = result.filter(o => o.order_status === status);
-    }
-    return res.json({ data: result });
+    const list = await Order.find(filter).sort({ order_date: -1 }).lean().catch(() => []);
+    return res.json({ data: list.map(o => ({ ...o, id: o._id })) });
   } catch (e) {
-    if (norm.includes('01')) return res.json({ data: DROP_01_ORDERS });
-    if (norm.includes('02')) return res.json({ data: DROP_02_ORDERS });
-    return res.json({ data: [...DROP_02_ORDERS, ...DROP_01_ORDERS] });
+    return res.json({ data: [] });
   }
 });
 

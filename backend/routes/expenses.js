@@ -180,28 +180,10 @@ router.get('/', async (req, res) => {
       filter.collection_name = new RegExp(collectionId, 'i');
     }
 
-    const list = await Expense.find(filter).sort({ expense_date: -1 }).lean();
-    if (list && list.length > 0) {
-      return res.json({ data: list.map(e => ({ ...e, id: e._id, amount_inr: (e.amount_paise || 0) / 100 })) });
-    }
-
-    let result = [];
-    if (norm.includes('01') || norm.includes('drop 1')) {
-      result = DROP_01_EXPENSES;
-    } else if (norm.includes('02') || norm.includes('drop 2')) {
-      result = DROP_02_EXPENSES;
-    } else {
-      result = [...DROP_02_EXPENSES, ...DROP_01_EXPENSES];
-    }
-
-    if (funding !== 'all') {
-      result = result.filter(e => e.funding_source === funding);
-    }
-    return res.json({ data: result });
+    const list = await Expense.find(filter).sort({ expense_date: -1 }).lean().catch(() => []);
+    return res.json({ data: list.map(e => ({ ...e, id: e._id, amount_inr: (e.amount_paise || 0) / 100 })) });
   } catch (e) {
-    if (norm.includes('01')) return res.json({ data: DROP_01_EXPENSES });
-    if (norm.includes('02')) return res.json({ data: DROP_02_EXPENSES });
-    return res.json({ data: [...DROP_02_EXPENSES, ...DROP_01_EXPENSES] });
+    return res.json({ data: [] });
   }
 });
 

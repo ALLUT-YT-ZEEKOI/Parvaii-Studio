@@ -73,17 +73,9 @@ router.get('/', async (req, res) => {
       if (flattened.length > 0) return res.json({ data: flattened });
     }
 
-    if (norm.includes('01') || norm.includes('drop 1')) {
-      return res.json({ data: DROP_01_VARIANTS });
-    }
-    if (norm.includes('02') || norm.includes('drop 2')) {
-      return res.json({ data: DROP_02_VARIANTS });
-    }
-    return res.json({ data: [...DROP_02_VARIANTS, ...DROP_01_VARIANTS] });
+    return res.json({ data: [] });
   } catch (e) {
-    if (norm.includes('01')) return res.json({ data: DROP_01_VARIANTS });
-    if (norm.includes('02')) return res.json({ data: DROP_02_VARIANTS });
-    return res.json({ data: [...DROP_02_VARIANTS, ...DROP_01_VARIANTS] });
+    return res.json({ data: [] });
   }
 });
 

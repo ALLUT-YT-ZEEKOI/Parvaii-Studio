@@ -41,21 +41,18 @@ const DEFAULT_REIMBURSEMENTS = [
 
 router.get('/', async (req, res) => {
   try {
-    const list = await Reimbursement.find().sort({ claim_date: -1 }).lean();
-    if (list && list.length > 0) {
-      return res.json({
-        data: list.map(r => ({
-          ...r,
-          id: r._id,
-          claim_inr: (r.claim_amount_paise || 0) / 100,
-          settled_inr: (r.settled_amount_paise || 0) / 100,
-          outstanding_inr: (r.outstanding_amount_paise || 0) / 100,
-        }))
-      });
-    }
-    return res.json({ data: DEFAULT_REIMBURSEMENTS });
+    const list = await Reimbursement.find().sort({ claim_date: -1 }).lean().catch(() => []);
+    return res.json({
+      data: list.map(r => ({
+        ...r,
+        id: r._id,
+        claim_inr: (r.claim_amount_paise || 0) / 100,
+        settled_inr: (r.settled_amount_paise || 0) / 100,
+        outstanding_inr: (r.outstanding_amount_paise || 0) / 100,
+      }))
+    });
   } catch (e) {
-    return res.json({ data: DEFAULT_REIMBURSEMENTS });
+    return res.json({ data: [] });
   }
 });
 

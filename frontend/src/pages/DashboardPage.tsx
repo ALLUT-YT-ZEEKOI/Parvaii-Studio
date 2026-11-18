@@ -103,10 +103,10 @@ export const DashboardPage: React.FC = () => {
   };
 
   const donutData = [
-    { name: 'Sold', value: data.order_status?.breakdown?.sold || 2, color: donutColors.sold },
-    { name: 'Processing', value: data.order_status?.breakdown?.processing || 5, color: donutColors.processing },
-    { name: 'Pending', value: data.order_status?.breakdown?.pending || 2, color: donutColors.pending },
-    { name: 'Cancelled', value: data.order_status?.breakdown?.cancelled || 1, color: donutColors.cancelled },
+    { name: 'Sold', value: data.order_status?.breakdown?.sold ?? 0, color: donutColors.sold },
+    { name: 'Processing', value: data.order_status?.breakdown?.processing ?? 0, color: donutColors.processing },
+    { name: 'Pending', value: data.order_status?.breakdown?.pending ?? 0, color: donutColors.pending },
+    { name: 'Cancelled', value: data.order_status?.breakdown?.cancelled ?? 0, color: donutColors.cancelled },
   ];
 
   return (
@@ -342,20 +342,20 @@ export const DashboardPage: React.FC = () => {
           <div className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Sales</span>
             <span className="text-lg font-extrabold text-[#0B162A] block mt-0.5">
-              ₹{data.kpis?.total_sales_inr?.toLocaleString() || '39,800'}
+              ₹{(data.kpis?.total_sales_inr ?? 0).toLocaleString()}
             </span>
             <span className="text-[10px] font-semibold text-emerald-600">
-              {data.order_status?.total_orders || 16} Orders • +28%
+              {data.order_status?.total_orders ?? 0} Orders
             </span>
           </div>
 
           <div className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Expenses</span>
             <span className="text-lg font-extrabold text-[#0B162A] block mt-0.5">
-              ₹{data.kpis?.total_expenses_inr?.toLocaleString() || '27,984'}
+              ₹{(data.kpis?.total_expenses_inr ?? 0).toLocaleString()}
             </span>
             <span className="text-[10px] font-semibold text-slate-500">
-              13 Bills logged
+              Logged Outflows
             </span>
           </div>
 
@@ -413,12 +413,12 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div className="mt-2.5">
             <span className="text-2xl font-extrabold tracking-tight text-[#0B162A]">
-              ₹{data.kpis?.total_sales_inr?.toLocaleString() || '39,800'}
+              ₹{(data.kpis?.total_sales_inr ?? 0).toLocaleString()}
             </span>
           </div>
           <div className="mt-2.5 flex items-center justify-between text-xs">
             <span className="text-[#059669] font-semibold">
-              {data.order_status?.total_orders || 16} Customer Orders
+              {data.order_status?.total_orders ?? 0} Customer Orders
             </span>
             <span className="text-[#059669] text-[11px] font-bold bg-emerald-50 px-1.5 py-0.5 rounded">
               +28%
@@ -436,7 +436,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div className="mt-2.5">
             <span className="text-2xl font-extrabold tracking-tight text-[#0B162A]">
-              ₹{data.kpis?.total_expenses_inr?.toLocaleString() || '27,984'}
+              ₹{(data.kpis?.total_expenses_inr ?? 0).toLocaleString()}
             </span>
           </div>
           <div className="mt-2.5 flex items-center justify-between text-xs">
@@ -565,7 +565,7 @@ export const DashboardPage: React.FC = () => {
             {/* Center Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
               <span className="text-xl font-extrabold text-[#0B162A] leading-tight">
-                {data.order_status?.total_orders || 10}
+                {data.order_status?.total_orders ?? 0}
               </span>
               <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
                 Orders
@@ -580,28 +580,28 @@ export const DashboardPage: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-[#2563EB]"></span>
                 Sold
               </span>
-              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.sold || 2}</span>
+              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.sold ?? 0}</span>
             </div>
             <div className="flex items-center justify-between px-2 py-1 rounded bg-slate-50">
               <span className="flex items-center gap-1.5 text-slate-600">
                 <span className="w-2 h-2 rounded-full bg-[#F59E0B]"></span>
                 Processing
               </span>
-              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.processing || 5}</span>
+              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.processing ?? 0}</span>
             </div>
             <div className="flex items-center justify-between px-2 py-1 rounded bg-slate-50">
               <span className="flex items-center gap-1.5 text-slate-600">
                 <span className="w-2 h-2 rounded-full bg-[#FCD34D]"></span>
                 Pending
               </span>
-              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.pending || 2}</span>
+              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.pending ?? 0}</span>
             </div>
             <div className="flex items-center justify-between px-2 py-1 rounded bg-slate-50">
               <span className="flex items-center gap-1.5 text-slate-600">
                 <span className="w-2 h-2 rounded-full bg-[#F87171]"></span>
                 Cancelled
               </span>
-              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.cancelled || 1}</span>
+              <span className="font-bold text-slate-800">{data.order_status?.breakdown?.cancelled ?? 0}</span>
             </div>
           </div>
         </div>
@@ -793,14 +793,14 @@ export const DashboardPage: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1 pb-2">
             <div>
               <span className="text-2xl font-extrabold text-[#0B162A] block">
-                {data.customer_overview?.total_customers || 24}
+                {data.customer_overview?.total_customers ?? 0}
               </span>
               <span className="text-xs text-[#64748B] font-medium">Total Customers</span>
             </div>
 
             <div>
               <span className="text-2xl font-extrabold text-[#0B162A] block">
-                {data.customer_overview?.repeat_customers || 18}
+                {data.customer_overview?.repeat_customers ?? 0}
               </span>
               <span className="text-xs text-[#64748B] font-medium">Repeat Customers</span>
             </div>
@@ -809,7 +809,7 @@ export const DashboardPage: React.FC = () => {
               <div className="flex items-center gap-1.5">
                 <Cake className="w-4 h-4 text-pink-500" />
                 <span className="text-2xl font-extrabold text-[#0B162A]">
-                  {data.customer_overview?.birthdays_this_week || 3}
+                  {data.customer_overview?.birthdays_this_week ?? 0}
                 </span>
               </div>
               <span className="text-xs text-[#64748B] font-medium">Birthdays This Week</span>

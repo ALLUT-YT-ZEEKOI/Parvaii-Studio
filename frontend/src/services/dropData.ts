@@ -276,16 +276,6 @@ export const drop02Orders: Order[] = [
 ];
 
 export const getOrdersForDrop = (dropName: string): Order[] => {
-  const norm = (dropName || '').toLowerCase();
-  if (norm.includes('01') || norm.includes('drop 1') || norm.includes('ethereal')) {
-    return drop01Orders;
-  }
-  if (norm.includes('02') || norm.includes('drop 2') || norm.includes('midnight')) {
-    return drop02Orders;
-  }
-  if (norm.includes('all') || norm === '') {
-    return [...drop02Orders, ...drop01Orders];
-  }
   return [];
 };
 
@@ -435,16 +425,6 @@ export const drop02Expenses: Expense[] = [
 ];
 
 export const getExpensesForDrop = (dropName: string): Expense[] => {
-  const norm = (dropName || '').toLowerCase();
-  if (norm.includes('01') || norm.includes('drop 1') || norm.includes('ethereal')) {
-    return drop01Expenses;
-  }
-  if (norm.includes('02') || norm.includes('drop 2') || norm.includes('midnight')) {
-    return drop02Expenses;
-  }
-  if (norm.includes('all') || norm === '') {
-    return [...drop02Expenses, ...drop01Expenses];
-  }
   return [];
 };
 
@@ -491,16 +471,6 @@ export const drop02Variants = [
 ];
 
 export const getInventoryForDrop = (dropName: string): any[] => {
-  const norm = (dropName || '').toLowerCase();
-  if (norm.includes('01') || norm.includes('drop 1') || norm.includes('ethereal')) {
-    return drop01Variants;
-  }
-  if (norm.includes('02') || norm.includes('drop 2') || norm.includes('midnight')) {
-    return drop02Variants;
-  }
-  if (norm.includes('all') || norm === '') {
-    return [...drop02Variants, ...drop01Variants];
-  }
   return [];
 };
 
@@ -651,51 +621,16 @@ export const drop02Products: Product[] = [
 ];
 
 export const getProductsForDrop = (dropName: string): Product[] => {
-  const norm = (dropName || '').toLowerCase();
-  if (norm.includes('01') || norm.includes('drop 1') || norm.includes('ethereal')) {
-    return drop01Products;
-  }
-  if (norm.includes('02') || norm.includes('drop 2') || norm.includes('midnight')) {
-    return drop02Products;
-  }
-  if (norm.includes('all') || norm === '') {
-    return [...drop02Products, ...drop01Products];
-  }
   return [];
 };
 
-// ─────────────────────────────────────────────────────────────
-// 5. ACCOUNTS & CASH FLOW BY DROP
-// ─────────────────────────────────────────────────────────────
-
 export const getAccountFlowForDrop = (dropName: string): DropAccountFlow => {
-  const norm = (dropName || '').toLowerCase();
-  if (norm.includes('01') || norm.includes('drop 1') || norm.includes('ethereal')) {
-    return {
-      activeDrop: 'Drop 01 (Summer 2026)',
-      inflowInr: 126000,
-      outflowInr: 77500,
-      netInr: 48500,
-      statusBadge: 'Profitable (+₹48,500 Net)',
-      summaryNote: 'Historical Drop 01 generated ₹1,26,000 sales against ₹77,500 total production/marketing outflow.'
-    };
-  }
-  if (norm.includes('02') || norm.includes('drop 2') || norm.includes('midnight')) {
-    return {
-      activeDrop: 'Drop 02 (Monsoon 2026)',
-      inflowInr: 5791,
-      outflowInr: 27984,
-      netInr: -22193,
-      statusBadge: 'Active Launch Phase (-₹22,193 Net)',
-      summaryNote: 'Active Drop 02 initial launch investment ₹27,984 with ₹5,791 early orders collected.'
-    };
-  }
   return {
-    activeDrop: 'All Drops Combined',
-    inflowInr: 131791,
-    outflowInr: 105484,
-    netInr: 26307,
-    statusBadge: 'Overall Healthy (+₹26,307 Net)',
-    summaryNote: 'Cumulative Parvaii cash inflow of ₹1,31,791 across all drops with net company surplus of ₹26,307.'
+    activeDrop: dropName,
+    inflowInr: 0,
+    outflowInr: 0,
+    netInr: 0,
+    statusBadge: 'New / Clean Slate',
+    summaryNote: 'No transactions recorded yet for this drop.'
   };
 };

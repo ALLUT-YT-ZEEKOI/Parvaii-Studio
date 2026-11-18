@@ -15,7 +15,7 @@ const BOUTIQUE_GALLERY_PRESETS = [
 
 export const ProductsPage: React.FC = () => {
   const { activeCollection, setActiveCollection, collections } = useAuth();
-  const [products, setProducts] = useState<Product[]>(() => getProductsForDrop(activeCollection));
+  const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
   const [isAddOpen, setIsAddOpen] = useState(false);
 
@@ -46,9 +46,6 @@ export const ProductsPage: React.FC = () => {
   }, [activeCollection]);
 
   const loadProducts = () => {
-    const fallback = getProductsForDrop(activeCollection);
-    setProducts(fallback);
-
     const params: Record<string, string> = {};
     if (activeCollection && activeCollection !== 'All Drops') {
       params.collection_id = activeCollection;
@@ -56,16 +53,16 @@ export const ProductsPage: React.FC = () => {
 
     api.get('/products', { params })
       .then((res) => {
-        if (res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        if (res.data?.data && Array.isArray(res.data.data)) {
           setProducts(res.data.data);
-        } else if (Array.isArray(res.data) && res.data.length > 0) {
+        } else if (Array.isArray(res.data)) {
           setProducts(res.data);
         } else {
-          setProducts(fallback);
+          setProducts([]);
         }
       })
       .catch(() => {
-        setProducts(fallback);
+        setProducts([]);
       });
   };
 
@@ -162,7 +159,14 @@ export const ProductsPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((product) => {
+        {filtered.length === 0 ? (
+          <div className="col-span-full bg-white rounded-2xl p-12 text-center border border-slate-200">
+            <Tag className="w-10 h-10 mx-auto mb-3 text-slate-300" />
+            <h3 className="font-bold text-slate-700 text-sm">No Products in {activeCollection}</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Click &quot;Add New Dress&quot; above to start designing and stocking your collection.</p>
+          </div>
+        ) : (
+          filtered.map((product) => {
           const margin = product.cost_price_inr
             ? Math.round(((product.selling_price_inr - product.cost_price_inr) / product.selling_price_inr) * 100)
             : 55;
@@ -195,7 +199,7 @@ export const ProductsPage: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-slate-400 text-[10px] block">Cost Price</span>
-                      <span className="text-xs font-semibold text-slate-600">₹{product.cost_price_inr || 200}</span>
+                      <span className="text-xs font-semibold text-slate-600">₹{product.cost_price_inr ?? 0}</span>
                     </div>
                     <div>
                       <span className="text-slate-400 text-[10px] block">Profit Margin</span>
@@ -224,11 +228,11 @@ export const ProductsPage: React.FC = () => {
 
               <div className="px-5 py-3 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span className="text-slate-500 font-medium">Available Inventory:</span>
-                <span className="font-bold text-[#0B162A]">{product.available_stock || 10} pieces</span>
+                <span className="font-bold text-[#0B162A]">{product.available_stock ?? 0} pieces</span>
               </div>
             </div>
           );
-        })}
+        }))}
       </div>
 
       {/* Add Product Modal */}

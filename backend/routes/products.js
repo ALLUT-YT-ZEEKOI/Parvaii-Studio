@@ -161,30 +161,18 @@ router.get('/', async (req, res) => {
       filter.collection_name = new RegExp(collectionId, 'i');
     }
 
-    const list = await Product.find(filter).lean();
-    if (list && list.length > 0) {
-      return res.json({
-        data: list.map(p => ({
-          ...p,
-          id: p._id,
-          selling_price_inr: (p.selling_price_paise || 0) / 100,
-          cost_price_inr: (p.cost_price_paise || 0) / 100,
-          available_stock: p.variants ? p.variants.reduce((acc, v) => acc + (v.available_stock || 0), 0) : 0,
-        }))
-      });
-    }
-
-    if (norm.includes('01') || norm.includes('drop 1')) {
-      return res.json({ data: DROP_01_PRODUCTS });
-    }
-    if (norm.includes('02') || norm.includes('drop 2')) {
-      return res.json({ data: DROP_02_PRODUCTS });
-    }
-    return res.json({ data: [...DROP_02_PRODUCTS, ...DROP_01_PRODUCTS] });
+    const list = await Product.find(filter).lean().catch(() => []);
+    return res.json({
+      data: list.map(p => ({
+        ...p,
+        id: p._id,
+        selling_price_inr: (p.selling_price_paise || 0) / 100,
+        cost_price_inr: (p.cost_price_paise || 0) / 100,
+        available_stock: p.variants ? p.variants.reduce((acc, v) => acc + (v.available_stock || 0), 0) : 0,
+      }))
+    });
   } catch (e) {
-    if (norm.includes('01')) return res.json({ data: DROP_01_PRODUCTS });
-    if (norm.includes('02')) return res.json({ data: DROP_02_PRODUCTS });
-    return res.json({ data: [...DROP_02_PRODUCTS, ...DROP_01_PRODUCTS] });
+    return res.json({ data: [] });
   }
 });
 

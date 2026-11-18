@@ -6,7 +6,7 @@ import { getInventoryForDrop } from '../services/dropData';
 
 export const InventoryPage: React.FC = () => {
   const { activeCollection, setActiveCollection } = useAuth();
-  const [variants, setVariants] = useState<any[]>(() => getInventoryForDrop(activeCollection));
+  const [variants, setVariants] = useState<any[]>([]);
   const [movements, setMovements] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'stock' | 'movements'>('stock');
   const [search, setSearch] = useState('');
@@ -21,9 +21,6 @@ export const InventoryPage: React.FC = () => {
   }, [activeCollection]);
 
   const loadInventory = () => {
-    const fallback = getInventoryForDrop(activeCollection);
-    setVariants(fallback);
-
     const params: Record<string, string> = {};
     if (activeCollection && activeCollection !== 'All Drops') {
       params.collection_id = activeCollection;
@@ -31,16 +28,16 @@ export const InventoryPage: React.FC = () => {
 
     api.get('/inventory', { params })
       .then((res) => {
-        if (res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        if (res.data?.data && Array.isArray(res.data.data)) {
           setVariants(res.data.data);
-        } else if (Array.isArray(res.data) && res.data.length > 0) {
+        } else if (Array.isArray(res.data)) {
           setVariants(res.data);
         } else {
-          setVariants(fallback);
+          setVariants([]);
         }
       })
       .catch(() => {
-        setVariants(fallback);
+        setVariants([]);
       });
   };
 
