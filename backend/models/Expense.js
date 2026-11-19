@@ -23,7 +23,7 @@ export const ExpenseCategory = mongoose.model('ExpenseCategory', expenseCategory
 const expenseSchema = new mongoose.Schema({
   expense_number: { type: String, required: true, unique: true },
   expense_date: { type: String, required: true },
-  category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'ExpenseCategory' },
+  category_id: { type: mongoose.Schema.Types.Mixed },
   category_name: { type: String, required: true },
   description: { type: String, required: true },
   amount_paise: { type: Number, required: true },
@@ -32,8 +32,8 @@ const expenseSchema = new mongoose.Schema({
     enum: ['company_account', 'personal_member', 'unpaid_supplier', 'split'],
     required: true,
   },
-  company_account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' },
-  paid_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  company_account_id: { type: mongoose.Schema.Types.Mixed },
+  paid_by_user_id: { type: mongoose.Schema.Types.Mixed },
   paid_by_member: {
     id: String,
     name: String,
@@ -42,9 +42,9 @@ const expenseSchema = new mongoose.Schema({
     status: String,
   },
   payment_mode: { type: String, default: 'upi' },
-  collection_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Collection' },
+  collection_id: { type: mongoose.Schema.Types.Mixed },
   collection_name: { type: String }, // cached for drop filtering
-  supplier_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
+  supplier_id: { type: mongoose.Schema.Types.Mixed },
   reference_number: { type: String },
   status: { type: String, enum: ['approved', 'pending', 'cancelled'], default: 'approved' },
   notes: { type: String },

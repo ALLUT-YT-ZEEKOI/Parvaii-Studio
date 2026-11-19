@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
     });
 
     return res.status(201).json({
+      success: true,
       message: `${newCol.name} created successfully`,
       collection: {
         ...newCol.toJSON(),
@@ -47,19 +48,10 @@ router.post('/', async (req, res) => {
     });
   } catch (err) {
     console.error('[Create Drop Error]', err);
-    const newCol = {
-      id: `drop-${Date.now()}`,
-      name: req.body.name || 'Drop 03',
-      code: req.body.code || 'DROP-03',
-      subtitle: req.body.subtitle || 'Upcoming Boutique Capsule',
-      season: req.body.season || 'Festive 2026',
-      status: 'active',
-      products_count: 0,
-      orders_count: 0,
-    };
-    return res.status(201).json({
-      message: `${newCol.name} created successfully`,
-      collection: newCol
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to create collection',
+      message: err.message
     });
   }
 });

@@ -21,14 +21,16 @@ async function clearDemoData() {
     await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 8000 });
     console.log('Connected to MongoDB Atlas!');
 
-    const [orders, expenses, products, customers, reimbursements, collections] = await Promise.all([
+    const [orders, expenses, products, customers, reimbursements] = await Promise.all([
       Order.deleteMany({}),
       Expense.deleteMany({}),
       Product.deleteMany({}),
       Customer.deleteMany({}),
       Reimbursement.deleteMany({}),
-      Collection.deleteMany({}),
     ]);
+
+    // Reset collections count
+    await Collection.updateMany({}, { products_count: 0, orders_count: 0 });
 
     console.log('✅ Demo data cleared:');
     console.log(`   - Orders deleted: ${orders.deletedCount}`);
@@ -36,8 +38,7 @@ async function clearDemoData() {
     console.log(`   - Products deleted: ${products.deletedCount}`);
     console.log(`   - Customers deleted: ${customers.deletedCount}`);
     console.log(`   - Reimbursements deleted: ${reimbursements.deletedCount}`);
-    console.log(`   - Collections deleted: ${collections.deletedCount}`);
-    console.log('✨ All records cleared — your database is now 100% clean for real boutique data.');
+    console.log('✨ All collections reset to clean slate (0 products, 0 orders).');
     console.log('====================================================');
 
     await mongoose.disconnect();
@@ -55,3 +56,4 @@ async function clearDemoData() {
 }
 
 clearDemoData();
+

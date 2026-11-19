@@ -49,10 +49,13 @@ export const AddExpenseModal: React.FC = () => {
     setMessage('');
 
     try {
+      const catObj = categories.find(c => String(c.id) === String(categoryId));
       await api.post('/expenses', {
         expense_date: expenseDate,
         collection_id: selectedCollection,
+        collection_name: selectedCollection,
         category_id: Number(categoryId),
+        category_name: catObj ? catObj.name : 'Fabric',
         description: description,
         amount: Number(amount),
         funding_source: fundingSource,
@@ -62,18 +65,16 @@ export const AddExpenseModal: React.FC = () => {
         reference_number: referenceNumber,
       });
 
-      setMessage('Expense recorded successfully! (Reimbursement created if personally funded)');
+      setMessage('Expense recorded successfully!');
       setTimeout(() => {
         setIsAddExpenseOpen(false);
         setMessage('');
         window.location.reload();
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
-      setMessage('Expense recorded in demo mode!');
-      setTimeout(() => {
-        setIsAddExpenseOpen(false);
-        setMessage('');
-      }, 1200);
+      console.error('[Add Expense Error]', err);
+      const errMsg = err.response?.data?.message || err.message || 'Failed to save expense';
+      setMessage(`Error: ${errMsg}`);
     } finally {
       setIsSubmitting(false);
     }

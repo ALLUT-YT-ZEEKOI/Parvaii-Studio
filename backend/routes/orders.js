@@ -222,12 +222,13 @@ router.get('/', async (req, res) => {
     const filter = {};
     if (status !== 'all') filter.order_status = status;
     if (collectionId && !['all', 'all drops', 'undefined', 'null'].includes(norm)) {
-      filter.collection_name = new RegExp(collectionId, 'i');
+      filter.collection_name = new RegExp(`^${collectionId}$`, 'i');
     }
 
-    const list = await Order.find(filter).sort({ order_date: -1 }).lean().catch(() => []);
+    const list = await Order.find(filter).sort({ order_date: -1, createdAt: -1 }).lean();
     return res.json({ data: list.map(o => ({ ...o, id: o._id })) });
   } catch (e) {
+    console.error('[Get Orders Error]', e);
     return res.json({ data: [] });
   }
 });
@@ -235,28 +236,53 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const orderData = req.body;
-    const count = await Order.countDocuments();
+    const count = await Order.countDocuments().catch(() => 0);
     const orderNum = `ORD-${(count + 1).toString().padStart(3, '0')}`;
+    const collectionName = orderData.collection_name || orderData.collection_id || 'Drop 01';
 
-    const totalPaise = (orderData.total_amount_inr || orderData.total_inr || 499) * 100;
-    const receivedPaise = (orderData.received_inr || totalPaise / 100) * 100;
+    const totalPaise = Math.round(Number(orderData.total_amount_inr || orderData.total_inr || 499) * 100);
+    const receivedPaise = Math.round(Number(orderData.received_inr !== undefined ? orderData.received_inr : totalPaise / 100) * 100);
 
     const newOrder = await Order.create({
       order_number: orderNum,
       order_date: new Date().toISOString().split('T')[0],
       total_amount_paise: totalPaise,
       received_amount_paise: receivedPaise,
-      balance_amount_paise: totalPaise - receivedPaise,
+      balance_amount_paise: Math.max(0, totalPaise - receivedPaise),
       order_status: 'processing',
       payment_status: receivedPaise >= totalPaise ? 'paid' : (receivedPaise > 0 ? 'partially_paid' : 'unpaid'),
-      collection_name: orderData.collection_name || 'Drop 02',
-      items: orderData.items || [],
-      customer: orderData.customer || { full_name: 'Boutique Client', phone: '+91 98765 00000' }
+      collection_name: collectionName,
+      items: (orderData.items || []).map(it => ({
+        product_name: it.product_name || 'Boutique Item',
+        size: it.size || 'M',
+        quantity: Number(it.quantity) || 1,
+        unit_price_paise: Math.round((Number(it.unit_price_inr || it.price) || 499) * 100),
+        total_price_paise: Math.round((Number(it.total_price_inr || it.price) || 499) * 100 * (Number(it.quantity) || 1)),
+      })),
+      customer: {
+        full_name: orderData.customer_name || orderData.customer?.full_name || 'Boutique Client',
+        phone: orderData.customer_phone || orderData.customer?.phone || '+91 98765 00000',
+        total_orders: 1,
+        total_spent_inr: totalPaise / 100,
+        outstanding_inr: Math.max(0, totalPaise - receivedPaise) / 100,
+      }
     });
 
-    return res.status(201).json({ message: 'Order created', data: newOrder });
+    return res.status(201).json({
+      success: true,
+      message: 'Order created successfully',
+      data: {
+        ...newOrder.toJSON(),
+        id: newOrder._id
+      }
+    });
   } catch (e) {
-    return res.status(200).json({ message: 'Order recorded', data: req.body });
+    console.error('[Create Order Error]', e);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to create order',
+      message: e.message
+    });
   }
 });
 

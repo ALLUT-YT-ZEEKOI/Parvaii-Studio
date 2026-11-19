@@ -177,12 +177,13 @@ router.get('/', async (req, res) => {
     const filter = { status: { $ne: 'cancelled' } };
     if (funding !== 'all') filter.funding_source = funding;
     if (collectionId && !['all', 'all drops', 'undefined', 'null'].includes(norm)) {
-      filter.collection_name = new RegExp(collectionId, 'i');
+      filter.collection_name = new RegExp(`^${collectionId}$`, 'i');
     }
 
-    const list = await Expense.find(filter).sort({ expense_date: -1 }).lean().catch(() => []);
+    const list = await Expense.find(filter).sort({ expense_date: -1, createdAt: -1 }).lean();
     return res.json({ data: list.map(e => ({ ...e, id: e._id, amount_inr: (e.amount_paise || 0) / 100 })) });
   } catch (e) {
+    console.error('[Get Expenses Error]', e);
     return res.json({ data: [] });
   }
 });
@@ -194,25 +195,71 @@ router.get('/categories', (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const data = req.body;
-    const count = await Expense.countDocuments();
+    const count = await Expense.countDocuments().catch(() => 0);
     const expNum = `EXP-${new Date().getFullYear()}-${(count + 1).toString().padStart(4, '0')}`;
-    const amountPaise = (data.amount || data.amount_inr || 1000) * 100;
+    const amountPaise = Math.round(Number(data.amount || data.amount_inr || 0) * 100);
+
+    // Resolve category name if only ID provided
+    let categoryName = data.category_name;
+    if (!categoryName && data.category_id) {
+      const cat = CATEGORIES.find(c => c.id === Number(data.category_id));
+      if (cat) categoryName = cat.name;
+    }
+    if (!categoryName) categoryName = 'Fabric';
+
+    // Resolve collection name
+    const collectionName = data.collection_name || data.collection_id || 'Drop 01';
+
+    // Resolve partner member info if funded personally
+    const MEMBERS = [
+      { id: '1', name: 'Allu', role: 'admin', email: 'allu@parvaii.com' },
+      { id: '2', name: 'Parvathy S.', role: 'partner', email: 'paru@parvaii.com' },
+      { id: '3', name: 'Aishwarya M.', role: 'partner', email: 'aishu@parvaii.com' },
+    ];
+    const member = data.funding_source === 'personal_member'
+      ? (MEMBERS.find(m => m.id === String(data.paid_by_user_id)) || MEMBERS[0])
+      : null;
 
     const newExp = await Expense.create({
       expense_number: expNum,
       expense_date: data.expense_date || new Date().toISOString().split('T')[0],
-      category_name: data.category_name || 'Fabric',
+      category_name: categoryName,
+      category_id: data.category_id,
       description: data.description || 'Boutique expense item',
       amount_paise: amountPaise,
-      funding_source: data.funding_source || 'personal_member',
+      funding_source: data.funding_source || 'company_account',
       payment_mode: data.payment_mode || 'upi',
-      collection_name: data.collection_name || 'Drop 02',
+      collection_name: collectionName,
+      collection_id: data.collection_id,
+      company_account_id: data.company_account_id,
+      paid_by_user_id: data.paid_by_user_id,
+      paid_by_member: member ? {
+        id: member.id,
+        name: member.name,
+        role: member.role,
+        email: member.email,
+        status: 'active'
+      } : undefined,
+      reference_number: data.reference_number,
       status: 'approved',
     });
 
-    return res.status(201).json({ message: 'Expense recorded', data: newExp });
+    return res.status(201).json({
+      success: true,
+      message: 'Expense recorded successfully',
+      data: {
+        ...newExp.toJSON(),
+        id: newExp._id,
+        amount_inr: (newExp.amount_paise || 0) / 100,
+      }
+    });
   } catch (e) {
-    return res.status(200).json({ message: 'Expense recorded', data: req.body });
+    console.error('[Create Expense Error]', e);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to record expense',
+      message: e.message
+    });
   }
 });
 

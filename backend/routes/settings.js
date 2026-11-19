@@ -37,14 +37,16 @@ router.get('/audit-logs', (req, res) => {
 // Clear all demo data from database
 router.post('/clear-database', async (req, res) => {
   try {
-    const [orders, expenses, products, customers, reimbursements, collections] = await Promise.all([
+    const [orders, expenses, products, customers, reimbursements] = await Promise.all([
       Order.deleteMany({}),
       Expense.deleteMany({}),
       Product.deleteMany({}),
       Customer.deleteMany({}),
       Reimbursement.deleteMany({}),
-      Collection.deleteMany({}),
     ]);
+
+    // Reset collections count
+    await Collection.updateMany({}, { products_count: 0, orders_count: 0 });
 
     return res.json({
       success: true,
@@ -55,7 +57,6 @@ router.post('/clear-database', async (req, res) => {
         products: products.deletedCount,
         customers: customers.deletedCount,
         reimbursements: reimbursements.deletedCount,
-        collections: collections.deletedCount,
       }
     });
   } catch (err) {

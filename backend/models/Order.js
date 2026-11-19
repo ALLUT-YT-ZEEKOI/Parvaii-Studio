@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const orderItemSchema = new mongoose.Schema({
-  product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-  product_variant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductVariant' },
+  product_id: { type: mongoose.Schema.Types.Mixed },
+  product_variant_id: { type: mongoose.Schema.Types.Mixed },
   product_name: { type: String, required: true },
   size: { type: String, required: true },
   quantity: { type: Number, default: 1 },
@@ -12,8 +12,8 @@ const orderItemSchema = new mongoose.Schema({
 
 const orderSchema = new mongoose.Schema({
   order_number: { type: String, required: true, unique: true },
-  customer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
-  collection_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Collection' },
+  customer_id: { type: mongoose.Schema.Types.Mixed },
+  collection_id: { type: mongoose.Schema.Types.Mixed },
   collection_name: { type: String }, // cached for drop filtering (Drop 01, Drop 02)
   order_date: { type: String, required: true },
   subtotal_paise: { type: Number, default: 0 },

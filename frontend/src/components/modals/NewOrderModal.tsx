@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 
 export const NewOrderModal: React.FC = () => {
-  const { isNewOrderOpen, setIsNewOrderOpen } = useAuth();
+  const { isNewOrderOpen, setIsNewOrderOpen, activeCollection } = useAuth();
 
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
@@ -43,13 +43,20 @@ export const NewOrderModal: React.FC = () => {
 
     try {
       await api.post('/orders', {
+        collection_name: activeCollection && activeCollection !== 'All Drops' ? activeCollection : 'Drop 01',
+        total_amount_inr: orderTotal,
+        received_inr: advanceAmount,
         customer_name: customerName,
         customer_phone: customerPhone,
         shipping_address: shippingAddress,
         items: [
           {
-            product_variant_id: Number(selectedVariantId),
+            product_variant_id: selectedVariantId,
+            product_name: currentItem.name,
+            size: currentItem.name.includes('(L)') ? 'L' : (currentItem.name.includes('(M)') ? 'M' : 'S'),
             quantity: quantity,
+            unit_price_inr: currentItem.price,
+            total_price_inr: subtotal,
           },
         ],
         discount: discount,
@@ -57,19 +64,16 @@ export const NewOrderModal: React.FC = () => {
         receiving_account_id: advanceAmount > 0 ? Number(receivingAccount) : null,
       });
 
-      setSuccessMessage('Order created and inventory reserved successfully!');
+      setSuccessMessage('Order created successfully!');
       setTimeout(() => {
         setIsNewOrderOpen(false);
         setSuccessMessage('');
         window.location.reload();
-      }, 1200);
+      }, 1000);
     } catch (err: any) {
-      // In offline/demo mode, simulate success
-      setSuccessMessage('Order placed in demo mode! (Inventory reserved)');
-      setTimeout(() => {
-        setIsNewOrderOpen(false);
-        setSuccessMessage('');
-      }, 1200);
+      console.error('[New Order Error]', err);
+      const errMsg = err.response?.data?.message || err.message || 'Failed to place order';
+      setSuccessMessage(`Error: ${errMsg}`);
     } finally {
       setIsSubmitting(false);
     }

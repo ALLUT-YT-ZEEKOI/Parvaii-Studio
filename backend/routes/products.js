@@ -158,10 +158,10 @@ router.get('/', async (req, res) => {
   try {
     const filter = {};
     if (collectionId && !['all', 'all drops', 'undefined', 'null'].includes(norm)) {
-      filter.collection_name = new RegExp(collectionId, 'i');
+      filter.collection_name = new RegExp(`^${collectionId}$`, 'i');
     }
 
-    const list = await Product.find(filter).lean().catch(() => []);
+    const list = await Product.find(filter).sort({ createdAt: -1 }).lean();
     return res.json({
       data: list.map(p => ({
         ...p,
@@ -172,6 +172,7 @@ router.get('/', async (req, res) => {
       }))
     });
   } catch (e) {
+    console.error('[Get Products Error]', e);
     return res.json({ data: [] });
   }
 });
@@ -179,14 +180,19 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const p = req.body;
+    const collectionName = p.collection_name || p.collection_id || 'Drop 01';
+    const costPricePaise = Math.round(Number(p.cost_price_inr || p.cost_price || 0) * 100);
+    const sellingPricePaise = Math.round(Number(p.selling_price_inr || p.selling_price || 0) * 100);
+
     const newProd = await Product.create({
       name: p.name,
       sku: p.sku || `PV-${Date.now().toString().slice(-4)}`,
       category: p.category || 'Dresses',
       fabric: p.fabric || 'Cotton',
-      collection_name: p.collection_name || 'Drop 02',
-      cost_price_paise: (p.cost_price_inr || p.cost_price || 200) * 100,
-      selling_price_paise: (p.selling_price_inr || p.selling_price || 599) * 100,
+      collection_name: collectionName,
+      collection_id: p.collection_id,
+      cost_price_paise: costPricePaise,
+      selling_price_paise: sellingPricePaise,
       image_url: p.image_url,
       status: 'active',
       variants: [
@@ -198,9 +204,23 @@ router.post('/', async (req, res) => {
       ]
     });
 
-    return res.status(201).json({ message: 'Product created', product: newProd });
+    return res.status(201).json({
+      success: true,
+      message: 'Product created successfully',
+      product: {
+        ...newProd.toJSON(),
+        id: newProd._id,
+        selling_price_inr: (newProd.selling_price_paise || 0) / 100,
+        cost_price_inr: (newProd.cost_price_paise || 0) / 100,
+      }
+    });
   } catch (e) {
-    return res.status(200).json({ message: 'Product created', product: req.body });
+    console.error('[Create Product Error]', e);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to create product',
+      message: e.message
+    });
   }
 });
 

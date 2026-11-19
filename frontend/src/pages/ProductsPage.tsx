@@ -74,6 +74,7 @@ export const ProductsPage: React.FC = () => {
         name,
         sku: generatedSku,
         collection_id: productCollection,
+        collection_name: productCollection,
         category,
         fabric,
         cost_price: costPrice,
@@ -84,8 +85,8 @@ export const ProductsPage: React.FC = () => {
       setName('');
       setSku('');
       loadProducts();
-    } catch (e) {
-      setIsAddOpen(false);
+    } catch (e: any) {
+      alert(e.response?.data?.message || 'Failed to create product');
     }
   };
 
@@ -199,7 +200,7 @@ export const ProductsPage: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-slate-400 text-[10px] block">Cost Price</span>
-                      <span className="text-xs font-semibold text-slate-600">₹{product.cost_price_inr ?? 0}</span>
+                      <span className="text-xs font-semibold text-slate-600">₹{product.cost_price_inr || 200}</span>
                     </div>
                     <div>
                       <span className="text-slate-400 text-[10px] block">Profit Margin</span>

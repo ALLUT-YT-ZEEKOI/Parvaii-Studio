@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   sku: { type: String, required: true, unique: true },
   slug: { type: String },
-  collection_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Collection' },
+  collection_id: { type: mongoose.Schema.Types.Mixed },
   collection_name: { type: String }, // cached for easy filtering
   category: { type: String, default: 'Dresses' },
   fabric: { type: String },

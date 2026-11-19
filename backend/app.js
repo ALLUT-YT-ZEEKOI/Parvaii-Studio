@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import { connectDB } from './config/db.js';
+import mongoose from 'mongoose';
+import { connectDB, lastDbError } from './config/db.js';
 
 // Route imports
 import authRoutes from './routes/auth.js';
@@ -42,6 +43,27 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(morgan('dev'));
+
+// Health & Database Diagnostics Endpoint
+app.get('/api/v1/health', async (req, res) => {
+  let isConnected = false;
+  let connError = lastDbError;
+  try {
+    await connectDB();
+    isConnected = mongoose.connection.readyState === 1;
+  } catch (err) {
+    connError = err.message;
+  }
+  return res.status(isConnected ? 200 : 503).json({
+    status: isConnected ? 'ok' : 'degraded',
+    mongodb: {
+      connected: isConnected,
+      readyState: mongoose.connection.readyState,
+      host: mongoose.connection.host || null,
+      error: connError,
+    }
+  });
+});
 
 // API V1 Routes
 app.use('/api/v1/auth', authRoutes);
