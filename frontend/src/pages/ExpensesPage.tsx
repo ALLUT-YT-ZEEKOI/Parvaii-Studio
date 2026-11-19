@@ -77,11 +77,10 @@ export const ExpensesPage: React.FC = () => {
               key={drop}
               type="button"
               onClick={() => setActiveCollection(drop)}
-              className={`px-3 py-1 rounded-xl text-xs font-bold shrink-0 transition-all ${
-                activeCollection === drop
-                  ? 'bg-[#0B162A] text-white shadow-sm ring-2 ring-[#C9B7A5]'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
-              }`}
+              className={`px-3 py-1 rounded-xl text-xs font-bold shrink-0 transition-all ${activeCollection === drop
+                ? 'bg-[#0B162A] text-white shadow-sm ring-2 ring-[#C9B7A5]'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                }`}
             >
               {drop}
             </button>
@@ -114,11 +113,10 @@ export const ExpensesPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setFundingFilter(tab.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
-                fundingFilter === tab.id
-                  ? 'bg-[#0B162A] text-white'
-                  : 'text-slate-600 hover:bg-slate-100'
-              }`}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${fundingFilter === tab.id
+                ? 'bg-[#0B162A] text-white'
+                : 'text-slate-600 hover:bg-slate-100'
+                }`}
             >
               {tab.label}
             </button>
@@ -193,11 +191,10 @@ export const ExpensesPage: React.FC = () => {
 
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <span
-                  className={`inline-block px-2 py-0.5 rounded-full text-[10.5px] font-semibold capitalize ${
-                    exp.status === 'cancelled'
-                      ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                      : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                  }`}
+                  className={`inline-block px-2 py-0.5 rounded-full text-[10.5px] font-semibold capitalize ${exp.status === 'cancelled'
+                    ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    }`}
                 >
                   {exp.status}
                 </span>
@@ -244,46 +241,35 @@ export const ExpensesPage: React.FC = () => {
                 </tr>
               ) : (
                 filtered.map((exp) => (
-                <tr key={exp.id} className="hover:bg-slate-50/60 transition-colors">
-                  <td className="py-3 px-4 font-bold text-[#0B162A]">{exp.expense_number}</td>
-                  <td className="py-3 px-4 text-slate-500 whitespace-nowrap">{exp.expense_date}</td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-0.5 rounded-md font-semibold bg-indigo-50 text-indigo-700">
-                      {exp.category_name}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 font-medium text-slate-800 max-w-[260px]">
-                    {exp.description}
-                  </td>
-                  <td className="py-3 px-4">
-                    {exp.funding_source === 'personal_member' ? (
-                      <span className="inline-flex items-center gap-1 font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                        Paid by {exp.paid_by_member?.name || 'Member'}
+                  <tr key={exp.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-3 px-4 font-bold text-[#0B162A]">{exp.expense_number}</td>
+                    <td className="py-3 px-4 text-slate-500 whitespace-nowrap">{exp.expense_date}</td>
+                    <td className="py-3 px-4">
+                      <span className="px-2 py-0.5 rounded-md font-semibold bg-indigo-50 text-indigo-700">
+                        {exp.category_name}
                       </span>
-                    ) : (
-                      <span className="text-slate-600 font-medium">Company Account</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4 font-bold text-[#0B162A]">
-                    ₹{exp.amount_inr?.toLocaleString()}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span
-                      className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${
-                        exp.status === 'cancelled'
+                    </td>
+                    <td className="py-3 px-4 font-medium text-slate-800 max-w-[260px]">
+                      {exp.description}
+                    </td>
+                    <td className="py-3 px-4">
+                      {exp.funding_source === 'personal_member' ? (
+                        <span className="inline-flex items-center gap-1 font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          Paid by {exp.paid_by_member?.name || 'Member'}
+                        </span>
+                      ) : (
+                        <span className="text-slate-600 font-medium">Company Account</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 font-bold text-[#0B162A]">
+                      ₹{exp.amount_inr?.toLocaleString()}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${exp.status === 'cancelled'
                           ? 'bg-rose-50 text-rose-700'
                           : 'bg-emerald-50 text-emerald-700'
-                      }`}
-                    >
-                      {exp.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    {exp.status !== 'cancelled' && (
-                      <button
-                        onClick={() => handleCancelExpense(exp.id)}
-                        className="p-1 text-slate-400 hover:text-rose-600 rounded transition-colors"
-                        title="Cancel Expense (Safe Reversal)"
+                          }`}
                       >
                         <Ban className="w-4 h-4" />
                       </button>

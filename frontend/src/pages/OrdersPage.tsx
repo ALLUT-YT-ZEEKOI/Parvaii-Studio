@@ -82,11 +82,10 @@ export const OrdersPage: React.FC = () => {
               key={drop}
               type="button"
               onClick={() => setActiveCollection(drop)}
-              className={`px-3 py-1 rounded-xl text-xs font-bold shrink-0 transition-all ${
-                activeCollection === drop
-                  ? 'bg-[#0B162A] text-white shadow-sm ring-2 ring-[#C9B7A5]'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
-              }`}
+              className={`px-3 py-1 rounded-xl text-xs font-bold shrink-0 transition-all ${activeCollection === drop
+                ? 'bg-[#0B162A] text-white shadow-sm ring-2 ring-[#C9B7A5]'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                }`}
             >
               {drop}
             </button>
@@ -117,11 +116,10 @@ export const OrdersPage: React.FC = () => {
             <button
               key={tab}
               onClick={() => setStatusFilter(tab)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-colors ${
-                statusFilter === tab
-                  ? 'bg-[#0B162A] text-white'
-                  : 'text-slate-600 hover:bg-slate-100'
-              }`}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-colors ${statusFilter === tab
+                ? 'bg-[#0B162A] text-white'
+                : 'text-slate-600 hover:bg-slate-100'
+                }`}
             >
               {tab}
             </button>
@@ -164,15 +162,14 @@ export const OrdersPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span
-                    className={`px-2.5 py-0.5 rounded-full text-[10.5px] font-bold uppercase tracking-wider ${
-                      order.order_status === 'sold' || order.order_status === 'delivered'
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        : order.order_status === 'processing'
+                    className={`px-2.5 py-0.5 rounded-full text-[10.5px] font-bold uppercase tracking-wider ${order.order_status === 'sold' || order.order_status === 'delivered'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : order.order_status === 'processing'
                         ? 'bg-amber-50 text-amber-700 border border-amber-200'
                         : order.order_status === 'cancelled'
-                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                        : 'bg-blue-50 text-blue-700 border border-blue-200'
-                    }`}
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                          : 'bg-blue-50 text-blue-700 border border-blue-200'
+                      }`}
                   >
                     {order.order_status}
                   </span>
@@ -310,66 +307,74 @@ export const OrdersPage: React.FC = () => {
                 </tr>
               ) : (
                 filteredOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
-                  <td className="py-3 px-4 font-bold text-[#0B162A]">
-                    {order.order_number}
-                  </td>
-                  <td className="py-3 px-4 text-slate-500 whitespace-nowrap">
-                    {order.order_date}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="font-semibold text-slate-800 block">
-                      {order.customer?.full_name || 'Guest'}
-                    </span>
-                    <span className="text-[11px] text-slate-400">
-                      {order.customer?.phone}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    {order.items?.map((it, idx) => (
-                      <span key={idx} className="block text-slate-700 font-medium">
-                        {it.product_name} ({it.size}) × {it.quantity}
+                  <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-3 px-4 font-bold text-[#0B162A]">
+                      {order.order_number}
+                    </td>
+                    <td className="py-3 px-4 text-slate-500 whitespace-nowrap">
+                      {order.order_date}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="font-semibold text-slate-800 block">
+                        {order.customer?.full_name || 'Guest'}
                       </span>
-                    )) || <span className="text-slate-400">1 item</span>}
-                  </td>
-                  <td className="py-3 px-4 font-extrabold text-[#0B162A]">
-                    ₹{order.total_inr?.toLocaleString()}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="text-emerald-600 font-semibold block">
-                      ₹{order.received_inr?.toLocaleString() || 0}
-                    </span>
-                    {order.balance_inr > 0 ? (
-                      <span className="text-rose-600 font-medium text-[11px]">
-                        Due: ₹{order.balance_inr?.toLocaleString()}
+                      <span className="text-[11px] text-slate-400">
+                        {order.customer?.phone}
                       </span>
-                    ) : (
-                      <span className="text-slate-400 text-[11px]">Fully Paid</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4">
-                    <select
-                      value={order.order_status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                      className="px-2 py-1 rounded-lg text-[11px] font-semibold border border-slate-200 bg-white"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="confirmed">Confirmed</option>
-                      <option value="processing">Processing</option>
-                      <option value="packed">Packed</option>
-                      <option value="sold">Sold</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      {order.balance_inr > 0 && (
+                    </td>
+                    <td className="py-3 px-4">
+                      {order.items?.map((it, idx) => (
+                        <span key={idx} className="block text-slate-700 font-medium">
+                          {it.product_name} ({it.size}) × {it.quantity}
+                        </span>
+                      )) || <span className="text-slate-400">1 item</span>}
+                    </td>
+                    <td className="py-3 px-4 font-extrabold text-[#0B162A]">
+                      ₹{order.total_inr?.toLocaleString()}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="text-emerald-600 font-semibold block">
+                        ₹{order.received_inr?.toLocaleString() || 0}
+                      </span>
+                      {order.balance_inr > 0 ? (
+                        <span className="text-rose-600 font-medium text-[11px]">
+                          Due: ₹{order.balance_inr?.toLocaleString()}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-[11px]">Fully Paid</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={order.order_status}
+                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                        className="px-2 py-1 rounded-lg text-[11px] font-semibold border border-slate-200 bg-white"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="processing">Processing</option>
+                        <option value="packed">Packed</option>
+                        <option value="sold">Sold</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        {order.balance_inr > 0 && (
+                          <button
+                            onClick={() => setIsReceivePaymentOpen(true)}
+                            className="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-[11px] font-semibold"
+                          >
+                            + Collect ₹{order.balance_inr}
+                          </button>
+                        )}
                         <button
-                          onClick={() => setIsReceivePaymentOpen(true)}
-                          className="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-[11px] font-semibold"
+                          onClick={() => setSelectedOrder(order)}
+                          className="p-1 text-slate-400 hover:text-slate-700 rounded"
+                          title="View details"
                         >
-                          + Collect ₹{order.balance_inr}
+                          <ChevronRight className="w-4 h-4" />
                         </button>
                       )}
                       <button

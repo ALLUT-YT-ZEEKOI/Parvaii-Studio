@@ -118,11 +118,10 @@ export const ProductsPage: React.FC = () => {
               key={drop}
               type="button"
               onClick={() => setActiveCollection(drop)}
-              className={`px-3 py-1 rounded-xl text-xs font-bold shrink-0 transition-all ${
-                activeCollection === drop
-                  ? 'bg-[#0B162A] text-white shadow-sm ring-2 ring-[#C9B7A5]'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
-              }`}
+              className={`px-3 py-1 rounded-xl text-xs font-bold shrink-0 transition-all ${activeCollection === drop
+                ? 'bg-[#0B162A] text-white shadow-sm ring-2 ring-[#C9B7A5]'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                }`}
             >
               {drop}
             </button>
@@ -168,64 +167,64 @@ export const ProductsPage: React.FC = () => {
           </div>
         ) : (
           filtered.map((product) => {
-          const margin = product.cost_price_inr
-            ? Math.round(((product.selling_price_inr - product.cost_price_inr) / product.selling_price_inr) * 100)
-            : 55;
+            const margin = product.cost_price_inr
+              ? Math.round(((product.selling_price_inr - product.cost_price_inr) / product.selling_price_inr) * 100)
+              : 55;
 
-          return (
-            <div
-              key={product.id}
-              className="bg-white rounded-2xl border border-[#E5E7EB] shadow-card hover:shadow-card-hover overflow-hidden transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="h-48 w-full bg-slate-100 relative overflow-hidden">
-                  <img
-                    src={product.image_url || 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80'}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-[#0B162A]/90 text-white backdrop-blur-sm rounded-lg text-[10px] font-bold uppercase tracking-wider">
-                    {product.category}
-                  </span>
-                </div>
-
-                <div className="p-5">
-                  <h3 className="text-sm font-bold text-[#0B162A]">{product.name}</h3>
-                  <p className="text-[11px] text-slate-400 font-medium">{product.sku} • {product.fabric || 'Cotton Blend'}</p>
-
-                  <div className="flex items-center justify-between mt-3 text-xs">
-                    <div>
-                      <span className="text-slate-400 text-[10px] block">Selling Price</span>
-                      <span className="text-base font-extrabold text-[#0B162A]">₹{product.selling_price_inr}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 text-[10px] block">Cost Price</span>
-                      <span className="text-xs font-semibold text-slate-600">₹{product.cost_price_inr || 200}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 text-[10px] block">Profit Margin</span>
-                      <span className="text-xs font-bold text-emerald-600">{margin}%</span>
-                    </div>
-                  </div>
-
-                  {/* Size Stock Badges */}
-                  <div className="mt-4 pt-3 border-t border-slate-100">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                      Sizes Available
+            return (
+              <div
+                key={product.id}
+                className="bg-white rounded-2xl border border-[#E5E7EB] shadow-card hover:shadow-card-hover overflow-hidden transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="h-48 w-full bg-slate-100 relative overflow-hidden">
+                    <img
+                      src={product.image_url || 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=400&q=80'}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <span className="absolute top-3 right-3 px-2.5 py-1 bg-[#0B162A]/90 text-white backdrop-blur-sm rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                      {product.category}
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['XS', 'S', 'M', 'L', 'XL'].map((s) => (
-                        <span
-                          key={s}
-                          className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-50 text-slate-700 border border-slate-200"
-                        >
-                          {s}
-                        </span>
-                      ))}
+                  </div>
+
+                  <div className="p-5">
+                    <h3 className="text-sm font-bold text-[#0B162A]">{product.name}</h3>
+                    <p className="text-[11px] text-slate-400 font-medium">{product.sku} • {product.fabric || 'Cotton Blend'}</p>
+
+                    <div className="flex items-center justify-between mt-3 text-xs">
+                      <div>
+                        <span className="text-slate-400 text-[10px] block">Selling Price</span>
+                        <span className="text-base font-extrabold text-[#0B162A]">₹{product.selling_price_inr}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 text-[10px] block">Cost Price</span>
+                        <span className="text-xs font-semibold text-slate-600">₹{product.cost_price_inr || 200}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 text-[10px] block">Profit Margin</span>
+                        <span className="text-xs font-bold text-emerald-600">{margin}%</span>
+                      </div>
+                    </div>
+
+                    {/* Size Stock Badges */}
+                    <div className="mt-4 pt-3 border-t border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                        Sizes Available
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['XS', 'S', 'M', 'L', 'XL'].map((s) => (
+                          <span
+                            key={s}
+                            className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-50 text-slate-700 border border-slate-200"
+                          >
+                            {s}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
               <div className="px-5 py-3 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span className="text-slate-500 font-medium">Available Inventory:</span>
@@ -381,11 +380,10 @@ export const ProductsPage: React.FC = () => {
                         key={idx}
                         type="button"
                         onClick={() => setImageUrl(preset.url)}
-                        className={`relative rounded-xl overflow-hidden border-2 transition-all group h-14 ${
-                          imageUrl === preset.url
-                            ? 'border-[#0B162A] ring-2 ring-[#C9B7A5]'
-                            : 'border-transparent hover:border-slate-300'
-                        }`}
+                        className={`relative rounded-xl overflow-hidden border-2 transition-all group h-14 ${imageUrl === preset.url
+                          ? 'border-[#0B162A] ring-2 ring-[#C9B7A5]'
+                          : 'border-transparent hover:border-slate-300'
+                          }`}
                         title={preset.name}
                       >
                         <img
