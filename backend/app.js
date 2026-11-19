@@ -81,17 +81,6 @@ app.use('/api/v1/members', memberRoutes);
 app.use('/api/v1/reports', reportRoutes);
 app.use('/api/v1/settings', settingRoutes);
 
-// Health check endpoint
-app.get('/api/v1/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    engine: 'Node.js Express (Vercel Serverless & Dedicated Server Ready)',
-    database: 'MongoDB Atlas',
-    domain: 'studio.parvaii.com',
-    timestamp: new Date().toISOString()
-  });
-});
-
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
