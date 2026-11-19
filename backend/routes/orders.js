@@ -278,10 +278,14 @@ router.post('/', async (req, res) => {
     });
   } catch (e) {
     console.error('[Create Order Error]', e);
-    return res.status(500).json({
+    const isConnErr = e.message?.includes('whitelist') || e.message?.includes('connect') || e.message?.includes('buffering timed out') || e.name === 'MongooseServerSelectionError';
+    return res.status(isConnErr ? 503 : 500).json({
       success: false,
       error: 'Failed to create order',
-      message: e.message
+      message: isConnErr
+        ? 'MongoDB Atlas is unreachable. Please whitelist 0.0.0.0/0 in MongoDB Atlas Network Access (cloud.mongodb.com).'
+        : e.message,
+      details: e.message
     });
   }
 });

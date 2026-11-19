@@ -266,17 +266,28 @@ export const ExpensesPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${exp.status === 'cancelled'
-                          ? 'bg-rose-50 text-rose-700'
-                          : 'bg-emerald-50 text-emerald-700'
-                          }`}
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${
+                          exp.status === 'cancelled'
+                            ? 'bg-rose-50 text-rose-700'
+                            : 'bg-emerald-50 text-emerald-700'
+                        }`}
                       >
-                        <Ban className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              )))}
+                        {exp.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      {exp.status !== 'cancelled' && (
+                        <button
+                          onClick={() => handleCancelExpense(exp.id)}
+                          className="p-1 text-slate-400 hover:text-rose-600 rounded transition-colors"
+                          title="Cancel Expense (Safe Reversal)"
+                        >
+                          <Ban className="w-4 h-4" />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                )))}
             </tbody>
           </table>
         </div>

@@ -105,8 +105,17 @@ export const AddExpenseModal: React.FC = () => {
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           {message && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold">
-              ✓ {message}
+            <div className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
+              message.startsWith('Error:')
+                ? 'bg-rose-50 border border-rose-200 text-rose-800'
+                : 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+            }`}>
+              {message.startsWith('Error:') ? (
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              ) : (
+                <span className="text-emerald-600 font-bold shrink-0">✓</span>
+              )}
+              <span>{message}</span>
             </div>
           )}
 

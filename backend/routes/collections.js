@@ -48,10 +48,14 @@ router.post('/', async (req, res) => {
     });
   } catch (err) {
     console.error('[Create Drop Error]', err);
-    return res.status(500).json({
+    const isConnErr = err.message?.includes('whitelist') || err.message?.includes('connect') || err.message?.includes('buffering timed out') || err.name === 'MongooseServerSelectionError';
+    return res.status(isConnErr ? 503 : 500).json({
       success: false,
       error: 'Failed to create collection',
-      message: err.message
+      message: isConnErr
+        ? 'MongoDB Atlas is unreachable. Please whitelist 0.0.0.0/0 in MongoDB Atlas Network Access (cloud.mongodb.com).'
+        : err.message,
+      details: err.message
     });
   }
 });

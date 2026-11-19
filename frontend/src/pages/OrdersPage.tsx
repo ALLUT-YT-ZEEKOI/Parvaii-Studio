@@ -376,16 +376,8 @@ export const OrdersPage: React.FC = () => {
                         >
                           <ChevronRight className="w-4 h-4" />
                         </button>
-                      )}
-                      <button
-                        onClick={() => setSelectedOrder(order)}
-                        className="p-1 text-slate-400 hover:text-slate-700 rounded"
-                        title="View details"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+                      </div>
+                    </td>
                 </tr>
               )))}
             </tbody>

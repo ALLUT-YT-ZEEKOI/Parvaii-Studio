@@ -104,8 +104,12 @@ export const NewOrderModal: React.FC = () => {
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           {successMessage && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold">
-              ✓ {successMessage}
+            <div className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
+              successMessage.startsWith('Error:')
+                ? 'bg-rose-50 border border-rose-200 text-rose-800'
+                : 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+            }`}>
+              <span>{successMessage}</span>
             </div>
           )}
 
