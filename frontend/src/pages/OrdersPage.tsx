@@ -378,8 +378,8 @@ export const OrdersPage: React.FC = () => {
                         </button>
                       </div>
                     </td>
-                </tr>
-              )))}
+                  </tr>
+                )))}
             </tbody>
           </table>
         </div>

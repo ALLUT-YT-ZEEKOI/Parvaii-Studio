@@ -3,10 +3,12 @@ import { Account, AccountTransaction } from '../models/Account.js';
 
 const router = express.Router();
 
-const DEFAULT_ACCOUNTS = [
-  { id: '1', name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_inr: 12500, opening_balance_inr: 15000, is_active: true },
-  { id: '2', name: 'Studio Cash Box', type: 'cash', balance_inr: 3743, opening_balance_inr: 5000, is_active: true },
+const EMPTY_ACCOUNTS = [
+  { id: '1', name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_inr: 0, opening_balance_inr: 0, is_active: true },
+  { id: '2', name: 'Studio Cash Box', type: 'cash', balance_inr: 0, opening_balance_inr: 0, is_active: true },
 ];
+
+const EMPTY_SUMMARY = { total_balance_inr: 0, bank_balance_inr: 0, cash_balance_inr: 0 };
 
 router.get('/', async (req, res) => {
   try {
@@ -30,13 +32,13 @@ router.get('/', async (req, res) => {
     }
 
     return res.json({
-      summary: { total_balance_inr: 16243, bank_balance_inr: 12500, cash_balance_inr: 3743 },
-      accounts: DEFAULT_ACCOUNTS,
+      summary: EMPTY_SUMMARY,
+      accounts: EMPTY_ACCOUNTS,
     });
   } catch (e) {
     return res.json({
-      summary: { total_balance_inr: 16243, bank_balance_inr: 12500, cash_balance_inr: 3743 },
-      accounts: DEFAULT_ACCOUNTS,
+      summary: EMPTY_SUMMARY,
+      accounts: EMPTY_ACCOUNTS,
     });
   }
 });
@@ -49,7 +51,7 @@ router.post('/investments', async (req, res) => {
   res.json({ message: 'Partner capital injection recorded successfully' });
 });
 
-router.get('/investments', async (req, res) => {
+router.get('/investments', (req, res) => {
   res.json({ data: [] });
 });
 

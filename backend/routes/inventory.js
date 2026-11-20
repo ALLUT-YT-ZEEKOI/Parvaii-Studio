@@ -86,8 +86,7 @@ router.post('/adjust', (req, res) => {
 router.get('/movements', (req, res) => {
   res.json({
     data: [
-      { id: 1, movement_type: 'order_reserved', quantity: -1, available_before: 2, available_after: 1, reserved_before: 0, reserved_after: 1, notes: 'Reserved for ORD-010', created_at: '2026-07-28 14:30' },
-      { id: 2, movement_type: 'order_fulfilled', quantity: -1, available_before: 1, available_after: 1, reserved_before: 1, reserved_after: 0, notes: 'Order ORD-010 delivered', created_at: '2026-07-28 16:45' },
+
     ]
   });
 });

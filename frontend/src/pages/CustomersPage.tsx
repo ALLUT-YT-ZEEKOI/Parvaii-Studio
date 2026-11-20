@@ -34,14 +34,7 @@ export const CustomersPage: React.FC = () => {
         }
       })
       .catch(() => {
-        // Fallback default list matching 24 total customers
-        setCustomers([
-          { id: 1, customer_code: 'CUST-0001', full_name: 'Ananya S.', phone: '+91 98765 43210', email: 'ananya.s@gmail.com', date_of_birth: '1996-12-18', city: 'Bengaluru', total_orders: 4, total_spent_inr: 5188, outstanding_inr: 0, avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80' },
-          { id: 2, customer_code: 'CUST-0002', full_name: 'Priya K.', phone: '+91 98765 43211', email: 'priya.k@outlook.com', date_of_birth: '1998-11-10', city: 'Chennai', total_orders: 2, total_spent_inr: 2594, outstanding_inr: 0, avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80' },
-          { id: 3, customer_code: 'CUST-0003', full_name: 'Nivedita R.', phone: '+91 98765 43212', email: 'nivedita.r@gmail.com', date_of_birth: '1997-11-12', city: 'Hyderabad', total_orders: 3, total_spent_inr: 3891, outstanding_inr: 0, avatar_url: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80' },
-          { id: 4, customer_code: 'CUST-0004', full_name: 'Deepika M.', phone: '+91 98765 43213', email: 'deepika@gmail.com', city: 'Mumbai', total_orders: 2, total_spent_inr: 2594, outstanding_inr: 0 },
-          { id: 5, customer_code: 'CUST-0005', full_name: 'Shruti Iyer', phone: '+91 98765 43214', email: 'shruti@gmail.com', city: 'Chennai', total_orders: 2, total_spent_inr: 2594, outstanding_inr: 0 },
-        ]);
+        setCustomers([]);
       });
   };
 

@@ -166,7 +166,10 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px]">
               <span className={activeCollection === 'Drop 01' ? 'text-slate-300' : 'text-slate-500'}>
-                55 Pcs Stock • <strong className={activeCollection === 'Drop 01' ? 'text-white' : 'text-slate-900'}>₹1.26L Sales</strong>
+                {activeCollection === 'Drop 01' ? data.kpis.stock_in_hand_pieces : 0} Pcs Stock •{' '}
+                <strong className={activeCollection === 'Drop 01' ? 'text-white' : 'text-slate-900'}>
+                  ₹{activeCollection === 'Drop 01' ? Math.round(data.kpis.total_sales_inr).toLocaleString() : '0'} Sales
+                </strong>
               </span>
             </div>
           </button>
@@ -194,7 +197,10 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px]">
               <span className={activeCollection === 'Drop 02' ? 'text-slate-300' : 'text-slate-500'}>
-                44 Pcs Stock • <strong className={activeCollection === 'Drop 02' ? 'text-white' : 'text-slate-900'}>₹5,791 Sales</strong>
+                {activeCollection === 'Drop 02' ? data.kpis.stock_in_hand_pieces : 0} Pcs Stock •{' '}
+                <strong className={activeCollection === 'Drop 02' ? 'text-white' : 'text-slate-900'}>
+                  ₹{activeCollection === 'Drop 02' ? Math.round(data.kpis.total_sales_inr).toLocaleString() : '0'} Sales
+                </strong>
               </span>
             </div>
           </button>
@@ -254,7 +260,10 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px]">
               <span className={activeCollection === 'All Drops' ? 'text-slate-300' : 'text-slate-500'}>
-                99 Pcs Stock • <strong className={activeCollection === 'All Drops' ? 'text-white' : 'text-slate-900'}>₹1.31L Sales</strong>
+                {activeCollection === 'All Drops' ? data.kpis.stock_in_hand_pieces : 0} Pcs Stock •{' '}
+                <strong className={activeCollection === 'All Drops' ? 'text-white' : 'text-slate-900'}>
+                  ₹{activeCollection === 'All Drops' ? Math.round(data.kpis.total_sales_inr).toLocaleString() : '0'} Sales
+                </strong>
               </span>
             </div>
           </button>
@@ -842,30 +851,35 @@ export const DashboardPage: React.FC = () => {
             </Link>
           </div>
 
-          {/* Birthday Card Matching Screenshot */}
+          {!data.featured_birthday ? (
+            <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-100 text-center">
+              <p className="text-xs font-semibold text-slate-600">No birthdays today</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Add customers to track upcoming dates</p>
+            </div>
+          ) : (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-slate-50/70 rounded-xl border border-slate-100">
             <div className="flex items-center gap-3">
               <img
-                src={data.featured_birthday?.avatar_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'}
-                alt={data.featured_birthday?.name || 'Ananya S.'}
+                src={data.featured_birthday.avatar_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'}
+                alt={data.featured_birthday.name}
                 className="w-10 h-10 rounded-full object-cover border border-white shadow-sm flex-shrink-0"
               />
               <div>
                 <h4 className="text-xs font-bold text-[#0B162A]">
-                  {data.featured_birthday?.name || 'Ananya S.'}
+                  {data.featured_birthday.name}
                 </h4>
                 <p className="text-[11px] text-slate-500 font-medium">
-                  {data.featured_birthday?.date_of_birth || '18 December'}
+                  {data.featured_birthday.date_of_birth}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <a
-                href={`https://api.whatsapp.com/send?phone=919876543210&text=${encodeURIComponent(
+                href={`https://api.whatsapp.com/send?phone=${(data.featured_birthday.whatsapp_number || data.featured_birthday.phone || '').replace(/\D/g, '')}&text=${encodeURIComponent(
                   'Dearest ' +
-                    (data.featured_birthday?.name || 'Ananya') +
-                    ', wishing you a wonderful birthday from all of us at PARVAII! Enjoy 15% off with code BDAY15.'
+                    data.featured_birthday.name +
+                    ', wishing you a wonderful birthday from all of us at PARVAII!'
                 )}`}
                 target="_blank"
                 rel="noreferrer"
@@ -884,6 +898,7 @@ export const DashboardPage: React.FC = () => {
               </Link>
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>

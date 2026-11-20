@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Settings, Shield, History, Save, CheckCircle2 } from 'lucide-react';
+import { Settings, Shield, History, Save, CheckCircle2, Moon, Sun } from 'lucide-react';
 import { api } from '../services/api';
+import { useTheme } from '../context/ThemeContext';
 
 export const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'general' | 'audit'>('general');
@@ -12,6 +13,7 @@ export const SettingsPage: React.FC = () => {
   const [currency, setCurrency] = useState('INR (₹)');
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [saveMessage, setSaveMessage] = useState('');
+  const { isDarkMode, toggleTheme } = useTheme();
 
   useEffect(() => {
     api.get('/settings')
@@ -58,6 +60,15 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 inline-flex items-center gap-2 shadow-xs dark:bg-gradient-to-r dark:from-[#0E1F3D] dark:to-[#13284F] dark:text-[#C9B7A5] dark:border-[#1E3760] transition-all"
+          >
+            {isDarkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-[#0B162A]" />}
+            <span>{isDarkMode ? 'Switch to White Mode' : 'Switch to Navy Dark Mode'}</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('general')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold ${

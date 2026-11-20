@@ -6,6 +6,7 @@ import { Product } from '../models/Product.js';
 import { Customer } from '../models/Customer.js';
 import { Reimbursement } from '../models/Reimbursement.js';
 import { Collection } from '../models/Collection.js';
+import { Account, AccountTransaction } from '../models/Account.js';
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ameenofficial33_db
 
 async function clearDemoData() {
   console.log('====================================================');
-  console.log('🧹 PARVAII Studio — Database Cleanup');
+  console.log('🧹 PARVAII Studio — Live Database Reset');
   console.log('====================================================');
   console.log('Connecting to MongoDB Atlas...');
 
@@ -21,24 +22,30 @@ async function clearDemoData() {
     await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 8000 });
     console.log('Connected to MongoDB Atlas!');
 
-    const [orders, expenses, products, customers, reimbursements] = await Promise.all([
+    const [orders, expenses, products, customers, reimbursements, transactions] = await Promise.all([
       Order.deleteMany({}),
       Expense.deleteMany({}),
       Product.deleteMany({}),
       Customer.deleteMany({}),
       Reimbursement.deleteMany({}),
+      AccountTransaction.deleteMany({}),
     ]);
 
-    // Reset collections count
     await Collection.updateMany({}, { products_count: 0, orders_count: 0 });
+    const accounts = await Account.updateMany(
+      {},
+      { $set: { balance_paise: 0, opening_balance_paise: 0 } }
+    );
 
-    console.log('✅ Demo data cleared:');
+    console.log('✅ Demo data cleared for live use:');
     console.log(`   - Orders deleted: ${orders.deletedCount}`);
     console.log(`   - Expenses deleted: ${expenses.deletedCount}`);
     console.log(`   - Products deleted: ${products.deletedCount}`);
     console.log(`   - Customers deleted: ${customers.deletedCount}`);
     console.log(`   - Reimbursements deleted: ${reimbursements.deletedCount}`);
-    console.log('✨ All collections reset to clean slate (0 products, 0 orders).');
+    console.log(`   - Account transactions deleted: ${transactions.deletedCount}`);
+    console.log(`   - Accounts zeroed: ${accounts.modifiedCount}`);
+    console.log('✨ Balances, stock, sales & claims are now ₹0 / 0.');
     console.log('====================================================');
 
     await mongoose.disconnect();
@@ -56,4 +63,3 @@ async function clearDemoData() {
 }
 
 clearDemoData();
-

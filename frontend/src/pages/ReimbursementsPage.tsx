@@ -24,48 +24,7 @@ export const ReimbursementsPage: React.FC = () => {
         }
       })
       .catch(() => {
-        // Authentic seed data matching reference: Allu ₹1,000, Paru ₹750, Kathu ₹500
-        setReimbursements([
-          {
-            id: 1,
-            reimbursement_number: 'RMB-2026-0001',
-            expense_id: 1,
-            user_id: 1,
-            claim_inr: 1000,
-            settled_inr: 0,
-            outstanding_inr: 1000,
-            status: 'pending',
-            claim_date: '2026-07-10',
-            member: { id: 1, name: 'Allu', role: 'admin', email: 'allu@parvaii.com', status: 'active' },
-            expense: { id: 1, expense_number: 'EXP-2026-0001', expense_date: '2026-07-10', category_id: 1, category_name: 'Fabric', description: 'Fine Indigo Modal Fabric for Midnight Bloom sampled at local weaver', amount_inr: 1000, amount_paise: 100000, funding_source: 'personal_member', payment_mode: 'upi', status: 'approved' }
-          },
-          {
-            id: 2,
-            reimbursement_number: 'RMB-2026-0002',
-            expense_id: 2,
-            user_id: 2,
-            claim_inr: 750,
-            settled_inr: 0,
-            outstanding_inr: 750,
-            status: 'pending',
-            claim_date: '2026-07-14',
-            member: { id: 2, name: 'Paru', role: 'partner', email: 'paru@parvaii.com', status: 'active' },
-            expense: { id: 2, expense_number: 'EXP-2026-0002', expense_date: '2026-07-14', category_id: 2, category_name: 'Stitching', description: 'Urgent boutique sample stitching batch', amount_inr: 750, amount_paise: 75000, funding_source: 'personal_member', payment_mode: 'upi', status: 'approved' }
-          },
-          {
-            id: 3,
-            reimbursement_number: 'RMB-2026-0003',
-            expense_id: 3,
-            user_id: 3,
-            claim_inr: 500,
-            settled_inr: 0,
-            outstanding_inr: 500,
-            status: 'pending',
-            claim_date: '2026-07-18',
-            member: { id: 3, name: 'Kathu', role: 'partner', email: 'kathu@parvaii.com', status: 'active' },
-            expense: { id: 3, expense_number: 'EXP-2026-0003', expense_date: '2026-07-18', category_id: 3, category_name: 'Packaging', description: 'Custom butter paper and woven brand tags for Drop 02', amount_inr: 500, amount_paise: 50000, funding_source: 'personal_member', payment_mode: 'upi', status: 'approved' }
-          }
-        ]);
+        setReimbursements([]);
       });
 
     api.get('/reimbursements/member-ledger')
@@ -75,11 +34,7 @@ export const ReimbursementsPage: React.FC = () => {
         }
       })
       .catch(() => {
-        setMemberLedger([
-          { user_id: 1, name: 'Allu', role: 'admin', total_claimed_inr: 1000, total_settled_inr: 0, outstanding_inr: 1000, pending_claims_count: 1 },
-          { user_id: 2, name: 'Paru', role: 'partner', total_claimed_inr: 750, total_settled_inr: 0, outstanding_inr: 750, pending_claims_count: 1 },
-          { user_id: 3, name: 'Kathu', role: 'partner', total_claimed_inr: 500, total_settled_inr: 0, outstanding_inr: 500, pending_claims_count: 1 },
-        ]);
+        setMemberLedger([]);
       });
   };
 

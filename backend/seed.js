@@ -22,8 +22,8 @@ async function seed() {
     if (existingCols === 0) {
       console.log('[Seed] Seeding Collections...');
       await Collection.create([
-        { name: 'Drop 01', code: 'DROP-01', subtitle: 'Ethereal Dawn', season: 'Summer 2026', status: 'archived', products_count: 3, orders_count: 6 },
-        { name: 'Drop 02', code: 'DROP-02', subtitle: 'Midnight Bloom', season: 'Monsoon 2026', status: 'active', products_count: 3, orders_count: 10 },
+        { name: 'Drop 01', code: 'DROP-01', subtitle: 'Ethereal Dawn', season: 'Summer 2026', status: 'archived', products_count: 0, orders_count: 0 },
+        { name: 'Drop 02', code: 'DROP-02', subtitle: 'Midnight Bloom', season: 'Monsoon 2026', status: 'active', products_count: 0, orders_count: 0 },
       ]);
     }
 
@@ -38,13 +38,13 @@ async function seed() {
       ]);
     }
 
-    // 3. Accounts (HDFC Bank ₹12,500 | Studio Cash Box ₹3,743)
+    // 3. Accounts (start at ₹0 for live use)
     const existingAccounts = await Account.countDocuments();
     if (existingAccounts === 0) {
       console.log('[Seed] Seeding Accounts...');
       await Account.create([
-        { name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_paise: 1250000, opening_balance_paise: 1500000, is_active: true },
-        { name: 'Studio Cash Box', type: 'cash', balance_paise: 374300, opening_balance_paise: 500000, is_active: true },
+        { name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_paise: 0, opening_balance_paise: 0, is_active: true },
+        { name: 'Studio Cash Box', type: 'cash', balance_paise: 0, opening_balance_paise: 0, is_active: true },
       ]);
     }
 

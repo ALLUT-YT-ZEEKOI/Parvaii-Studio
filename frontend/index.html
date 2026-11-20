@@ -8,6 +8,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#0B162A" />
     <title>PARVAII — Clothing Brand Management System</title>
+    <!-- Prevent Theme Flash -->
+    <script>
+      (function() {
+        var t = localStorage.getItem('parvaii_theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
     <!-- Google Fonts for brand typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

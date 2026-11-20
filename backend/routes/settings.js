@@ -5,6 +5,7 @@ import { Product } from '../models/Product.js';
 import { Customer } from '../models/Customer.js';
 import { Reimbursement } from '../models/Reimbursement.js';
 import { Collection } from '../models/Collection.js';
+import { Account, AccountTransaction } from '../models/Account.js';
 
 const router = express.Router();
 
@@ -37,16 +38,17 @@ router.get('/audit-logs', (req, res) => {
 // Clear all demo data from database
 router.post('/clear-database', async (req, res) => {
   try {
-    const [orders, expenses, products, customers, reimbursements] = await Promise.all([
+    const [orders, expenses, products, customers, reimbursements, transactions] = await Promise.all([
       Order.deleteMany({}),
       Expense.deleteMany({}),
       Product.deleteMany({}),
       Customer.deleteMany({}),
       Reimbursement.deleteMany({}),
+      AccountTransaction.deleteMany({}),
     ]);
 
-    // Reset collections count
     await Collection.updateMany({}, { products_count: 0, orders_count: 0 });
+    await Account.updateMany({}, { $set: { balance_paise: 0, opening_balance_paise: 0 } });
 
     return res.json({
       success: true,
@@ -57,6 +59,7 @@ router.post('/clear-database', async (req, res) => {
         products: products.deletedCount,
         customers: customers.deletedCount,
         reimbursements: reimbursements.deletedCount,
+        account_transactions: transactions.deletedCount,
       }
     });
   } catch (err) {

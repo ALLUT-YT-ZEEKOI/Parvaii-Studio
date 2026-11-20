@@ -13,6 +13,7 @@ const BOUTIQUE_GALLERY_PRESETS = [
   { name: 'Sage Brocade Kaftan', url: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80' },
 ];
 
+
 export const ProductsPage: React.FC = () => {
   const { activeCollection, setActiveCollection, collections } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
@@ -29,6 +30,7 @@ export const ProductsPage: React.FC = () => {
   const [sellingPrice, setSellingPrice] = useState(599);
   const [imageUrl, setImageUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

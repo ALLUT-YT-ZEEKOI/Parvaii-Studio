@@ -12,11 +12,13 @@ import {
   ShoppingCart,
   IndianRupee,
   LogOut,
-  User as UserIcon,
   Sparkles,
   Layers,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -27,7 +29,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const navigate = useNavigate();
   const {
     user,
-    login,
     logout,
     activeCollection,
     setActiveCollection,
@@ -40,6 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
     setIsReceivePaymentOpen,
     setIsAddDropOpen,
   } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const [isCollectionDropdownOpen, setIsCollectionDropdownOpen] = useState(false);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
@@ -106,6 +108,27 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
         {/* Right: Global Search, Notification & Profile */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* Mode Switcher: White Mode vs Midnight Navy Dark Mode */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="group flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold shadow-xs transition-all duration-200 border bg-white border-[#E5E7EB] text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:bg-gradient-to-r dark:from-[#0E1F3D] dark:to-[#13284F] dark:border-[#1E3760] dark:text-[#C9B7A5] dark:hover:border-[#C9B7A5]/60 dark:hover:shadow-[0_0_12px_rgba(201,183,165,0.15)]"
+            aria-label={isDarkMode ? 'Switch to White Mode' : 'Switch to Midnight Navy Dark Mode'}
+            title={isDarkMode ? 'Switch to White Mode' : 'Switch to Midnight Navy Dark Mode'}
+          >
+            {isDarkMode ? (
+              <>
+                <Sun className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span className="hidden sm:inline text-[11px] font-bold tracking-wide text-slate-200">White Mode</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5 text-[#0B162A] shrink-0" />
+                <span className="hidden sm:inline text-[11px] font-bold text-slate-700 tracking-wide">Navy Dark</span>
+              </>
+            )}
+          </button>
+
           {/* Global Search Bar */}
           <div className="relative hidden md:flex items-center w-64 lg:w-80">
             <Search className="absolute left-3.5 w-4 h-4 text-slate-400" />
@@ -157,46 +180,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                 <div className="px-4 py-2 border-b border-slate-100">
                   <p className="text-xs font-bold text-[#0B162A]">{user?.name}</p>
                   <p className="text-[11px] text-slate-500 truncate">{user?.email}</p>
-                </div>
-
-                {/* Switch Partner Quick Selector */}
-                <div className="p-2 border-b border-slate-100 bg-slate-50/60" onClick={(e) => e.stopPropagation()}>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1 px-1">
-                    Three Founding Partners:
-                  </span>
-                  <div className="space-y-1">
-                    {[
-                      { id: 1, name: 'Allu', role: 'admin', email: 'allu@parvaii.com' },
-                      { id: 2, name: 'Paru', role: 'partner', email: 'paru@parvaii.com' },
-                      { id: 3, name: 'Kathu', role: 'partner', email: 'kathu@parvaii.com' },
-                    ].map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => {
-                          login(`token-${p.name}`, {
-                            id: p.id,
-                            name: p.name,
-                            email: p.email,
-                            role: p.role as any,
-                            status: 'active',
-                          });
-                          setIsProfileDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-2.5 py-1 rounded-lg text-xs flex items-center justify-between transition-colors ${
-                          user?.name === p.name
-                            ? 'bg-white font-bold text-[#0B162A] shadow-sm border border-slate-200'
-                            : 'text-slate-600 hover:bg-white hover:text-slate-900'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#C9B7A5]"></span>
-                          {p.name}
-                        </span>
-                        <span className="text-[10px] text-slate-400 capitalize">{p.role}</span>
-                      </button>
-                    ))}
-                  </div>
                 </div>
 
                 <button

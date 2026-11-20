@@ -8,7 +8,7 @@ import { getAccountFlowForDrop } from '../services/dropData';
 export const AccountsPage: React.FC = () => {
   const { activeCollection, setActiveCollection, collections } = useAuth();
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [summary, setSummary] = useState({ total_balance_inr: 16243, bank_balance_inr: 12500, cash_balance_inr: 3743 });
+  const [summary, setSummary] = useState({ total_balance_inr: 0, bank_balance_inr: 0, cash_balance_inr: 0 });
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isInvestOpen, setIsInvestOpen] = useState(false);
 
@@ -40,9 +40,10 @@ export const AccountsPage: React.FC = () => {
       })
       .catch(() => {
         setAccounts([
-          { id: 1, name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_inr: 12500, opening_balance_inr: 15000, is_active: true },
-          { id: 2, name: 'Studio Cash Box', type: 'cash', balance_inr: 3743, opening_balance_inr: 5000, is_active: true },
+          { id: 1, name: 'HDFC Bank Current A/c', type: 'bank', bank_name: 'HDFC Bank', account_number: '50200084920194', ifsc_code: 'HDFC0001234', branch: 'T. Nagar, Chennai', balance_inr: 0, opening_balance_inr: 0, is_active: true },
+          { id: 2, name: 'Studio Cash Box', type: 'cash', balance_inr: 0, opening_balance_inr: 0, is_active: true },
         ]);
+        setSummary({ total_balance_inr: 0, bank_balance_inr: 0, cash_balance_inr: 0 });
       });
   };
 

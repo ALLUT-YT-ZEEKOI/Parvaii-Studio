@@ -13,11 +13,194 @@
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 180ms ease, color 180ms ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
     color: #0B162A;
     letter-spacing: -0.015em;
+  }
+
+  /* ========================================================
+     PARVAII ATELIER — MIDNIGHT NAVY & WHITE THEME
+     A rich, luxurious gradient of deep navy blue, midnight indigo,
+     and obsidian blue with champagne gold accents (#C9B7A5).
+     ======================================================== */
+  .dark {
+    color-scheme: dark;
+  }
+
+  .dark body {
+    background: radial-gradient(circle at 85% 15%, #0F2244 0%, transparent 45%),
+                linear-gradient(135deg, #050B15 0%, #081326 40%, #0B1C38 75%, #060E1C 100%) fixed;
+    background-color: #081326;
+    color: #F1F5F9;
+  }
+
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5,
+  .dark h6 {
+    color: #F8FAFC !important;
+  }
+
+  /* Deep Midnight Navy Surface & Card Overrides */
+  .dark .bg-white {
+    background: linear-gradient(180deg, #0E1B33 0%, #0A1428 100%) !important;
+    border-color: #1E3358 !important;
+  }
+
+  /* Keep Sidebar Active Link Distinct with Champagne Gold Highlight in Dark Mode */
+  .dark aside .bg-white {
+    background: #C9B7A5 !important;
+    color: #0B162A !important;
+  }
+  .dark aside .bg-white * {
+    color: #0B162A !important;
+  }
+
+  .dark .bg-\[\#F8F9FC\],
+  .dark .bg-\[\#F7F5F0\],
+  .dark .bg-\[\#FAF8F5\],
+  .dark .bg-\[\#EFEAE1\] {
+    background: transparent !important;
+  }
+
+  .dark .bg-slate-50,
+  .dark .bg-slate-50\/50,
+  .dark .bg-slate-50\/60,
+  .dark .bg-slate-50\/70,
+  .dark .bg-slate-100,
+  .dark .bg-slate-100\/70 {
+    background-color: #0C172E !important;
+  }
+
+  .dark .bg-gradient-to-r.from-white {
+    background: linear-gradient(90deg, #0E1B33 0%, #0B162B 50%, #0E1B33 100%) !important;
+  }
+
+  /* Refined Navy-Slate Borders */
+  .dark .border,
+  .dark [class*='border-slate-'],
+  .dark .border-\[\#E5E7EB\],
+  .dark .border-\[\#E2E8F0\] {
+    border-color: #1A2D4F !important;
+  }
+
+  .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+  .dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: #1A2D4F !important;
+  }
+
+  /* Text & Contrast Overrides */
+  .dark .text-\[\#0B162A\] {
+    color: #F1F5F9 !important;
+  }
+
+  .dark .text-slate-800,
+  .dark .text-slate-700 {
+    color: #E2E8F0 !important;
+  }
+
+  .dark .text-slate-600,
+  .dark .text-slate-500,
+  .dark .text-\[\#64748B\] {
+    color: #94A3B8 !important;
+  }
+
+  .dark .text-slate-400 {
+    color: #64748B !important;
+  }
+
+  .dark .placeholder\:text-slate-400::placeholder {
+    color: #475569 !important;
+  }
+
+  /* Form Elements & Inputs */
+  .dark input,
+  .dark select,
+  .dark textarea {
+    background-color: #081224 !important;
+    color: #F1F5F9 !important;
+    border-color: #1E3358 !important;
+  }
+
+  .dark input:focus,
+  .dark select:focus,
+  .dark textarea:focus {
+    border-color: #C9B7A5 !important;
+    box-shadow: 0 0 0 2px rgba(201, 183, 165, 0.2) !important;
+  }
+
+  /* Tables & Rows */
+  .dark thead tr {
+    background-color: #0A152A !important;
+    color: #94A3B8 !important;
+  }
+
+  .dark tr.hover\:bg-slate-50\/60:hover,
+  .dark .hover\:bg-slate-50:hover,
+  .dark .hover\:bg-slate-50\/70:hover,
+  .dark .hover\:bg-slate-100:hover {
+    background-color: #11213E !important;
+  }
+
+  /* Dropdown Menus, Popovers, & Modals */
+  .dark .shadow-lg,
+  .dark .shadow-xl,
+  .dark .shadow-2xl,
+  .dark .shadow-card {
+    box-shadow: 0 12px 36px -4px rgba(2, 6, 17, 0.65), 0 0 0 1px #1E3358 !important;
+  }
+
+  .dark .bg-white.rounded-2xl,
+  .dark .bg-white.rounded-xl {
+    border-color: #1E3358 !important;
+  }
+
+  /* Chips, Badges & Accents */
+  .dark .bg-slate-100,
+  .dark .bg-slate-200\/60 {
+    background-color: #132442 !important;
+    color: #CBD5E1 !important;
+  }
+
+  .dark .bg-emerald-50 {
+    background-color: rgba(6, 78, 59, 0.25) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+  }
+
+  .dark .bg-rose-50,
+  .dark .bg-\[\#FFE4E6\] {
+    background-color: rgba(136, 19, 55, 0.25) !important;
+    border-color: rgba(244, 63, 94, 0.3) !important;
+  }
+
+  .dark .bg-amber-50,
+  .dark .bg-amber-50\/50 {
+    background-color: rgba(120, 53, 15, 0.25) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+  }
+
+  /* Recharts In Dark Mode */
+  .dark .recharts-cartesian-grid-horizontal line,
+  .dark .recharts-cartesian-grid-vertical line {
+    stroke: #172846 !important;
+  }
+  .dark .recharts-cartesian-axis-line,
+  .dark .recharts-cartesian-axis-tick-line {
+    stroke: #1E3358 !important;
+  }
+  .dark .recharts-text {
+    fill: #94A3B8 !important;
+  }
+
+  /* Modal Dialog Surfaces */
+  .dark .fixed .bg-white.rounded-2xl {
+    background: linear-gradient(180deg, #102140 0%, #0B172E 100%) !important;
+    border-color: #223C66 !important;
   }
 }
 
