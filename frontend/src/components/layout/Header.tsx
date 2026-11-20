@@ -85,23 +85,23 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const { title, subtitle } = getPageInfo();
 
   return (
-    <header className="sticky top-0 z-30 bg-[#F8F9FC]/95 backdrop-blur-md border-b border-[#E5E7EB] px-4 sm:px-6 lg:px-8 pt-4 pb-3">
+    <header className="sticky top-0 z-30 bg-[#F8F9FC]/95 dark:bg-[#081326]/95 backdrop-blur-md border-b border-[#E5E7EB] dark:border-[#172D4E] px-4 sm:px-6 lg:px-8 pt-4 pb-3 transition-colors duration-200">
       {/* Top Level: Hamburger, Page Title, Search & Profile */}
       <div className="flex items-center justify-between gap-4">
         {/* Left: Mobile Toggle & Page Headings */}
         <div className="flex items-center gap-3">
           <button
             onClick={onToggleSidebar}
-            className="p-2 -ml-2 rounded-xl text-slate-700 hover:text-[#0B162A] hover:bg-white transition-colors lg:hidden"
+            className="p-2 -ml-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-[#0B162A] dark:hover:text-white hover:bg-white dark:hover:bg-[#0E1C38] transition-colors lg:hidden"
             aria-label="Toggle navigation"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B162A]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B162A] dark:text-white">
               {title}
             </h1>
-            <p className="text-xs sm:text-[13px] text-[#64748B] font-medium hidden sm:block">
+            <p className="text-xs sm:text-[13px] text-[#64748B] dark:text-slate-400 font-medium hidden sm:block">
               {subtitle}
             </p>
           </div>
@@ -120,18 +120,18 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search orders, customers, products..."
-              className="w-full pl-9 pr-16 py-2 bg-white text-xs text-[#0B162A] rounded-xl border border-[#E5E7EB] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C9B7A5]/50 focus:border-[#C9B7A5] transition-all shadow-sm"
+              className="w-full pl-9 pr-16 py-2 bg-white dark:bg-[#0B172E] text-xs text-[#0B162A] dark:text-white rounded-xl border border-[#E5E7EB] dark:border-[#1E3760] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C9B7A5]/50 focus:border-[#C9B7A5] transition-all shadow-sm"
             />
-            <span className="absolute right-3 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 bg-slate-100 rounded border border-slate-200">
+            <span className="absolute right-3 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-[#132442] dark:text-slate-300 rounded border border-slate-200 dark:border-[#1E3760]">
               Ctrl + K
             </span>
           </div>
 
           {/* Notifications Bell */}
           <div className="relative">
-            <button className="p-2.5 rounded-xl bg-white border border-[#E5E7EB] text-slate-600 hover:text-[#0B162A] hover:border-slate-300 shadow-sm transition-all relative">
+            <button className="p-2.5 rounded-xl bg-white dark:bg-[#0E1C38] border border-[#E5E7EB] dark:border-[#1E3760] text-slate-600 dark:text-slate-300 hover:text-[#0B162A] dark:hover:text-white hover:border-slate-300 shadow-sm transition-all relative">
               <Bell className="w-4 h-4" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-[#081326]"></span>
             </button>
           </div>
 
@@ -139,16 +139,16 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           <div className="relative">
             <button
               onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-              className="flex items-center gap-2.5 p-1 sm:p-1.5 rounded-xl hover:bg-white transition-all text-left"
+              className="flex items-center gap-2.5 p-1 sm:p-1.5 rounded-xl hover:bg-white dark:hover:bg-[#0E1C38] transition-all text-left"
             >
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0B162A] text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0B162A] dark:bg-gradient-to-tr dark:from-[#C9B7A5] dark:to-[#E5D7C9] text-white dark:text-[#0B162A] flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm">
                 {user?.name?.charAt(0) || 'A'}
               </div>
               <div className="hidden sm:flex flex-col">
-                <span className="text-xs sm:text-[13px] font-bold text-[#0B162A] leading-tight">
+                <span className="text-xs sm:text-[13px] font-bold text-[#0B162A] dark:text-white leading-tight">
                   {user?.name || 'Allu'}
                 </span>
-                <span className="text-[11px] text-[#64748B] capitalize leading-none font-medium mt-0.5">
+                <span className="text-[11px] text-[#64748B] dark:text-slate-400 capitalize leading-none font-medium mt-0.5">
                   {user?.role || 'Admin'}
                 </span>
               </div>
@@ -207,7 +207,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                 setIsProfileDropdownOpen(false);
                 setIsCollectionDropdownOpen(!isCollectionDropdownOpen);
               }}
-              className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#0B162A] text-xs font-semibold rounded-xl border border-[#E5E7EB] hover:border-slate-300 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
+              className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#0E1C38] text-[#0B162A] dark:text-white text-xs font-semibold rounded-xl border border-[#E5E7EB] dark:border-[#1E3760] hover:border-slate-300 dark:hover:border-[#C9B7A5]/50 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
             >
               <span className="w-2.5 h-2.5 rounded-full bg-[#C9B7A5]"></span>
               <span className="font-bold">{activeCollection}</span>
@@ -297,7 +297,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                 setIsProfileDropdownOpen(false);
                 setIsDateDropdownOpen(!isDateDropdownOpen);
               }}
-              className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#0B162A] text-xs font-medium rounded-xl border border-[#E5E7EB] hover:border-slate-300 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
+              className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#0E1C38] text-[#0B162A] dark:text-white text-xs font-medium rounded-xl border border-[#E5E7EB] dark:border-[#1E3760] hover:border-slate-300 dark:hover:border-[#C9B7A5]/50 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
             >
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span>{dateRange}</span>

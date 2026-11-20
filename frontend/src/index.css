@@ -7,7 +7,21 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  html {
+    min-height: 100%;
+    background-color: #F8F9FC;
+  }
+
+  html.dark {
+    background-color: #081326 !important;
+    background: radial-gradient(circle at 85% 15%, #0F2244 0%, transparent 45%),
+                radial-gradient(circle at 15% 85%, #0B1C38 0%, transparent 40%),
+                linear-gradient(135deg, #050B15 0%, #081326 40%, #0B1C38 75%, #060E1C 100%) fixed !important;
+    color-scheme: dark;
+  }
+
   body {
+    min-height: 100%;
     background-color: #F8F9FC;
     color: #0B162A;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -30,12 +44,21 @@
     color-scheme: dark;
   }
 
-  .dark body {
+  html.dark body,
+  .dark body,
+  .dark #root {
+    background-color: #081326 !important;
     background: radial-gradient(circle at 85% 15%, #0F2244 0%, transparent 45%),
                 radial-gradient(circle at 15% 85%, #0B1C38 0%, transparent 40%),
-                linear-gradient(135deg, #050B15 0%, #081326 40%, #0B1C38 75%, #060E1C 100%) fixed;
-    background-color: #081326;
+                linear-gradient(135deg, #050B15 0%, #081326 40%, #0B1C38 75%, #060E1C 100%) fixed !important;
     color: #F1F5F9;
+  }
+
+  .dark .min-h-screen {
+    background-color: #081326 !important;
+    background: radial-gradient(circle at 85% 15%, #0F2244 0%, transparent 45%),
+                radial-gradient(circle at 15% 85%, #0B1C38 0%, transparent 40%),
+                linear-gradient(135deg, #050B15 0%, #081326 40%, #0B1C38 75%, #060E1C 100%) fixed !important;
   }
 
   .dark h1,
@@ -48,8 +71,10 @@
   }
 
   /* Header Blur In Dark Mode */
-  .dark header {
-    background: rgba(8, 19, 38, 0.92) !important;
+  .dark header,
+  .dark header[class*='bg-\[\#F8F9FC\]'] {
+    background: rgba(8, 19, 38, 0.94) !important;
+    background-color: rgba(8, 19, 38, 0.94) !important;
     backdrop-filter: blur(16px) !important;
     border-color: #172D4E !important;
   }
@@ -73,7 +98,7 @@
   .dark .bg-\[\#F7F5F0\],
   .dark .bg-\[\#FAF8F5\],
   .dark .bg-\[\#EFEAE1\] {
-    background: transparent !important;
+    background-color: #081326 !important;
   }
 
   .dark .bg-slate-50,
