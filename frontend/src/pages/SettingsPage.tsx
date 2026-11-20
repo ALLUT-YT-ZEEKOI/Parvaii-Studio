@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Settings, Shield, History, Save, CheckCircle2, Moon, Sun } from 'lucide-react';
+import { Settings, Shield, History, Save, CheckCircle2, Moon, Sun, Palette } from 'lucide-react';
 import { api } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
+import { ThemeSwitch } from '../components/common/ThemeSwitch';
 
 export const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'general' | 'audit'>('general');
@@ -60,14 +61,7 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 inline-flex items-center gap-2 shadow-xs dark:bg-gradient-to-r dark:from-[#0E1F3D] dark:to-[#13284F] dark:text-[#C9B7A5] dark:border-[#1E3760] transition-all"
-          >
-            {isDarkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-[#0B162A]" />}
-            <span>{isDarkMode ? 'Switch to White Mode' : 'Switch to Navy Dark Mode'}</span>
-          </button>
+          <ThemeSwitch size="sm" showLabels={true} />
 
           <button
             onClick={() => setActiveTab('general')}
@@ -89,7 +83,26 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       {activeTab === 'general' ? (
-        <form onSubmit={handleSave} className="bg-white rounded-2xl border border-[#E5E7EB] shadow-card p-6 space-y-4 max-w-2xl">
+        <div className="space-y-4 max-w-2xl">
+          {/* Appearance & Theme Selector */}
+          <div className="bg-white dark:bg-gradient-to-br dark:from-[#0E1C36] dark:to-[#09152B] rounded-2xl border border-[#E5E7EB] dark:border-[#1E3760] shadow-card p-5">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-[#13284C] flex items-center justify-center text-amber-600 dark:text-[#C9B7A5] border border-amber-200/60 dark:border-[#234375]">
+                  <Palette className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[#0B162A] dark:text-white">Workspace Color Theme</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Switch between crisp White Mode and luxury Midnight Navy Gradient
+                  </p>
+                </div>
+              </div>
+              <ThemeSwitch size="md" showLabels={true} />
+            </div>
+          </div>
+
+          <form onSubmit={handleSave} className="bg-white rounded-2xl border border-[#E5E7EB] shadow-card p-6 space-y-4">
           {saveMessage && (
             <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
@@ -170,6 +183,7 @@ export const SettingsPage: React.FC = () => {
             </button>
           </div>
         </form>
+      </div>
       ) : (
         <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-card overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between">

@@ -21,6 +21,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { ThemeSwitch } from '../common/ThemeSwitch';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -210,6 +211,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Theme Switcher Bar */}
+        <div className="px-3.5 py-2.5 border-t border-[#1A2740] flex items-center justify-between shrink-0 bg-[#070F1E]/60">
+          <span className="text-[11px] font-medium text-slate-400">Theme</span>
+          <ThemeSwitch size="sm" showLabels={true} />
         </div>
 
         {/* Bottom Active Collection Pill */}

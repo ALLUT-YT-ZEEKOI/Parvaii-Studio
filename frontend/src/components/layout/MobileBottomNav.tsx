@@ -13,6 +13,7 @@ import {
   IndianRupee,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { ThemeSwitch } from '../common/ThemeSwitch';
 
 interface MobileBottomNavProps {
   onOpenSidebar: () => void;
@@ -124,6 +125,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSidebar 
                   <span className="text-[10px] text-slate-400 group-hover:text-slate-200">Record customer pay</span>
                 </div>
               </button>
+            </div>
+
+            {/* Quick Theme Switcher */}
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-600">Workspace Theme</span>
+              <ThemeSwitch size="sm" showLabels={true} />
             </div>
           </div>
         </div>

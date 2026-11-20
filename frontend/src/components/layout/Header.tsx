@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { ThemeSwitch } from '../common/ThemeSwitch';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -108,26 +109,8 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
         {/* Right: Global Search, Notification & Profile */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Mode Switcher: White Mode vs Midnight Navy Dark Mode */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="group flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold shadow-xs transition-all duration-200 border bg-white border-[#E5E7EB] text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:bg-gradient-to-r dark:from-[#0E1F3D] dark:to-[#13284F] dark:border-[#1E3760] dark:text-[#C9B7A5] dark:hover:border-[#C9B7A5]/60 dark:hover:shadow-[0_0_12px_rgba(201,183,165,0.15)]"
-            aria-label={isDarkMode ? 'Switch to White Mode' : 'Switch to Midnight Navy Dark Mode'}
-            title={isDarkMode ? 'Switch to White Mode' : 'Switch to Midnight Navy Dark Mode'}
-          >
-            {isDarkMode ? (
-              <>
-                <Sun className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span className="hidden sm:inline text-[11px] font-bold tracking-wide text-slate-200">White Mode</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-3.5 h-3.5 text-[#0B162A] shrink-0" />
-                <span className="hidden sm:inline text-[11px] font-bold text-slate-700 tracking-wide">Navy Dark</span>
-              </>
-            )}
-          </button>
+          {/* Theme Switch: Crisp White Light Mode vs Midnight Navy Dark Mode */}
+          <ThemeSwitch size="sm" showLabels={true} className="shrink-0" />
 
           {/* Global Search Bar */}
           <div className="relative hidden md:flex items-center w-64 lg:w-80">

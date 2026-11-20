@@ -6,6 +6,7 @@ interface ThemeContextType {
   theme: Theme;
   isDarkMode: boolean;
   toggleTheme: () => void;
+  setTheme: (theme: Theme) => void;
 }
 
 const STORAGE_KEY = 'parvaii_theme';
@@ -37,6 +38,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       theme,
       isDarkMode: theme === 'dark',
       toggleTheme: () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark')),
+      setTheme: (newTheme: Theme) => setTheme(newTheme),
     }),
     [theme],
   );
