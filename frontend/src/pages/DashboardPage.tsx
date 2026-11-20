@@ -114,7 +114,7 @@ export const DashboardPage: React.FC = () => {
       {/* ──────────────────────────────────────────────────────────
           DEDICATED GLOBAL DROP SELECTION & ISOLATION HUB
       ────────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-white via-slate-50/70 to-white dark:from-[#0E1C38] dark:via-[#112344] dark:to-[#0A162B] p-3.5 sm:p-5 rounded-3xl border border-slate-200/90 dark:border-[#1E3760] shadow-sm space-y-3">
+      <div className="bg-gradient-to-r from-white via-slate-50/70 to-white p-3.5 sm:p-5 rounded-3xl border border-slate-200/90 shadow-sm space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">

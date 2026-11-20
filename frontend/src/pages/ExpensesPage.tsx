@@ -266,11 +266,10 @@ export const ExpensesPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${
-                          exp.status === 'cancelled'
-                            ? 'bg-rose-50 text-rose-700'
-                            : 'bg-emerald-50 text-emerald-700'
-                        }`}
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${exp.status === 'cancelled'
+                          ? 'bg-rose-50 text-rose-700'
+                          : 'bg-emerald-50 text-emerald-700'
+                          }`}
                       >
                         {exp.status}
                       </span>

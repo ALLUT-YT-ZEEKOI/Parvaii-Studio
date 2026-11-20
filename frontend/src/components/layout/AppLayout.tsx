@@ -14,7 +14,7 @@ export const AppLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FC] text-[#0B162A] dark:bg-[#081326] dark:text-slate-100 flex flex-col antialiased transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8F9FC] text-[#0B162A] flex flex-col antialiased">
       {/* Sidebar Navigation */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 

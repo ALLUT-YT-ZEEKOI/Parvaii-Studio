@@ -8,23 +8,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#0B162A" />
     <title>PARVAII — Clothing Brand Management System</title>
-    <!-- Prevent Theme Flash -->
+    <!-- Clean Theme Reset to Pure Light Mode -->
     <script>
-      (function() {
-        var t = localStorage.getItem('parvaii_theme');
-        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      })();
+      try {
+        localStorage.removeItem('parvaii_theme');
+        document.documentElement.classList.remove('dark');
+      } catch (e) {}
     </script>
     <!-- Google Fonts for brand typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-[#F8F9FC] text-[#0B162A] dark:bg-[#081326] dark:text-slate-100 antialiased selection:bg-[#C9B7A5]/30">
+  <body class="bg-[#F8F9FC] text-[#0B162A] antialiased selection:bg-[#C9B7A5]/30">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

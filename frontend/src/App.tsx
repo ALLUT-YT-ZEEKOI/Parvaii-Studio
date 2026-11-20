@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import { AppLayout } from './components/layout/AppLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { OrdersPage } from './pages/OrdersPage';
@@ -31,33 +30,31 @@ const queryClient = new QueryClient({
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
 
-              <Route path="/" element={<AppLayout />}>
-                <Route index element={<DashboardPage />} />
-                <Route path="collections" element={<CollectionsPage />} />
-                <Route path="orders" element={<OrdersPage />} />
-                <Route path="customers" element={<CustomersPage />} />
-                <Route path="products" element={<ProductsPage />} />
-                <Route path="inventory" element={<InventoryPage />} />
-                <Route path="purchases" element={<PurchasesPage />} />
-                <Route path="expenses" element={<ExpensesPage />} />
-                <Route path="reimbursements" element={<ReimbursementsPage />} />
-                <Route path="accounts" element={<AccountsPage />} />
-                <Route path="members" element={<MembersPage />} />
-                <Route path="reports" element={<ReportsPage />} />
-                <Route path="settings" element={<SettingsPage />} />
-              </Route>
+            <Route path="/" element={<AppLayout />}>
+              <Route index element={<DashboardPage />} />
+              <Route path="collections" element={<CollectionsPage />} />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route path="customers" element={<CustomersPage />} />
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="inventory" element={<InventoryPage />} />
+              <Route path="purchases" element={<PurchasesPage />} />
+              <Route path="expenses" element={<ExpensesPage />} />
+              <Route path="reimbursements" element={<ReimbursementsPage />} />
+              <Route path="accounts" element={<AccountsPage />} />
+              <Route path="members" element={<MembersPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
 
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
-      </ThemeProvider>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
