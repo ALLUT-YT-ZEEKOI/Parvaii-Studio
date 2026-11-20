@@ -98,7 +98,7 @@ export const ExpensesPage: React.FC = () => {
           onClick={() => setIsAddExpenseOpen(true)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B162A] text-white rounded-xl text-xs font-semibold hover:bg-[#162544] shadow-sm transition-all"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#C9B7A5]" />
           <span>Add Expense</span>
         </button>
       </div>
