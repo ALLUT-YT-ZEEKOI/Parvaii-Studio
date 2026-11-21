@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { X, Plus, Trash2, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useSnackbar } from '../../context/SnackbarContext';
 import { api } from '../../services/api';
 
 export const NewOrderModal: React.FC = () => {
   const { isNewOrderOpen, setIsNewOrderOpen, activeCollection } = useAuth();
+  const snackbar = useSnackbar();
 
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
@@ -64,16 +66,15 @@ export const NewOrderModal: React.FC = () => {
         receiving_account_id: advanceAmount > 0 ? Number(receivingAccount) : null,
       });
 
-      setSuccessMessage('Order created successfully!');
-      setTimeout(() => {
-        setIsNewOrderOpen(false);
-        setSuccessMessage('');
-        window.location.reload();
-      }, 1000);
+      snackbar.success('Order created successfully');
+      setIsNewOrderOpen(false);
+      setSuccessMessage('');
+      window.location.reload();
     } catch (err: any) {
       console.error('[New Order Error]', err);
       const errMsg = err.response?.data?.message || err.message || 'Failed to place order';
       setSuccessMessage(`Error: ${errMsg}`);
+      snackbar.error(errMsg);
     } finally {
       setIsSubmitting(false);
     }

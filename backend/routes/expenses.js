@@ -1,5 +1,6 @@
 import express from 'express';
 import { Expense, ExpenseCategory } from '../models/Expense.js';
+import { Account, AccountTransaction } from '../models/Account.js';
 
 const router = express.Router();
 
@@ -220,6 +221,38 @@ router.post('/', async (req, res) => {
       ? (MEMBERS.find(m => m.id === String(data.paid_by_user_id)) || MEMBERS[0])
       : null;
 
+    const fundingSource = data.funding_source || 'company_account';
+    let companyAccountId = data.company_account_id;
+
+    // Company-paid expenses reduce bank/cash balance
+    if (fundingSource === 'company_account' && amountPaise > 0) {
+      let account = null;
+      if (companyAccountId) {
+        account = await Account.findById(companyAccountId);
+      }
+      if (!account) {
+        account = await Account.findOne({ type: 'bank', is_active: true })
+          || await Account.findOne({ is_active: true });
+      }
+      if (account) {
+        const newBalance = Math.max(0, (account.balance_paise || 0) - amountPaise);
+        account.balance_paise = newBalance;
+        await account.save();
+        companyAccountId = account._id;
+
+        await AccountTransaction.create({
+          account_id: account._id,
+          type: 'debit',
+          amount_paise: amountPaise,
+          balance_after_paise: newBalance,
+          payment_mode: data.payment_mode || 'upi',
+          reference_type: 'expense',
+          transaction_date: data.expense_date || new Date().toISOString().split('T')[0],
+          description: data.description || `${categoryName} expense`,
+        });
+      }
+    }
+
     const newExp = await Expense.create({
       expense_number: expNum,
       expense_date: data.expense_date || new Date().toISOString().split('T')[0],
@@ -227,11 +260,11 @@ router.post('/', async (req, res) => {
       category_id: data.category_id,
       description: data.description || 'Boutique expense item',
       amount_paise: amountPaise,
-      funding_source: data.funding_source || 'company_account',
+      funding_source: fundingSource,
       payment_mode: data.payment_mode || 'upi',
       collection_name: collectionName,
       collection_id: data.collection_id,
-      company_account_id: data.company_account_id,
+      company_account_id: companyAccountId,
       paid_by_user_id: data.paid_by_user_id,
       paid_by_member: member ? {
         id: member.id,

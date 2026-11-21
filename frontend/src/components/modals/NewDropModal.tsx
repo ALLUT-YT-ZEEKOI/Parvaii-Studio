@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { X, Sparkles, Calendar, Tag, FileText, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useSnackbar } from '../../context/SnackbarContext';
 import { api } from '../../services/api';
+import { DROP_CATEGORIES } from '../../constants/dropCategories';
 
 export const NewDropModal: React.FC = () => {
   const { isAddDropOpen, setIsAddDropOpen, addCollection, collections } = useAuth();
+  const snackbar = useSnackbar();
 
   const nextNum = (collections.length + 1).toString().padStart(2, '0');
   const [name, setName] = useState(`Drop ${nextNum}`);
   const [subtitle, setSubtitle] = useState('');
-  const [season, setSeason] = useState('Festive / Autumn 2026');
+  const [category, setCategory] = useState('Dresses');
   const [launchDate, setLaunchDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [status, setStatus] = useState('active');
   const [description, setDescription] = useState('');
@@ -30,10 +33,12 @@ export const NewDropModal: React.FC = () => {
     setError(null);
 
     try {
+      const codeNum = name.replace(/\D/g, '') || String(collections.length + 1).padStart(2, '0');
       const res = await api.post('/collections', {
         name: name.trim(),
+        code: `DROP-${codeNum}`,
         subtitle: subtitle.trim() || undefined,
-        season: season.trim() || undefined,
+        category,
         launch_date: launchDate || undefined,
         status,
         description: description.trim() || undefined,
@@ -44,49 +49,40 @@ export const NewDropModal: React.FC = () => {
         name: name.trim(),
         code: `DROP-${name.replace(/\D/g, '') || 'NEW'}`,
         subtitle: subtitle.trim(),
-        season: season.trim(),
+        category,
         launch_date: launchDate,
         status,
         description: description.trim(),
       };
 
       addCollection(newCol);
-      setSuccessMsg(`"${newCol.name}" created! Switched to this drop.`);
-
-      setTimeout(() => {
-        setSubmitting(false);
-        setSuccessMsg(null);
-        setIsAddDropOpen(false);
-        // Reset form
-        setName('');
-        setSubtitle('');
-        setDescription('');
-      }, 1000);
+      snackbar.success(`“${newCol.name}” created`);
+      setSubmitting(false);
+      setIsAddDropOpen(false);
+      setName('');
+      setSubtitle('');
+      setDescription('');
     } catch (err: any) {
       console.error('Failed to create collection', err);
-      // Fallback gracefully so founder is never blocked!
       const fallbackCol = {
         id: 'drop-' + Date.now(),
         name: name.trim(),
         code: `DROP-${name.replace(/\D/g, '') || '03'}`,
         subtitle: subtitle.trim(),
-        season: season.trim(),
+        category,
         launch_date: launchDate,
         status,
         description: description.trim(),
       };
       addCollection(fallbackCol);
-      setSuccessMsg(`"${fallbackCol.name}" added to session!`);
-      setTimeout(() => {
-        setSubmitting(false);
-        setSuccessMsg(null);
-        setIsAddDropOpen(false);
-      }, 900);
+      snackbar.info(`“${fallbackCol.name}” added to this session`);
+      setSubmitting(false);
+      setIsAddDropOpen(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150 overflow-y-auto p-3 sm:p-6">
+    <div className="fixed inset-0 z-[70] bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150 overflow-y-auto p-3 sm:p-6">
       <div className="min-h-full w-full flex items-center justify-center">
       <div className="relative w-full max-w-[680px] my-2 sm:my-6 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
         {/* Header */}
@@ -167,17 +163,21 @@ export const NewDropModal: React.FC = () => {
             />
           </div>
 
-          {/* Season & Launch Date */}
+          {/* Category & Launch Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Season</label>
-              <input
-                type="text"
-                value={season}
-                onChange={(e) => setSeason(e.target.value)}
-                placeholder="e.g. Festive / Autumn 2026"
-                className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#C9B7A5]"
-              />
+              <label className="text-xs font-bold text-slate-700">Category *</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full h-11 px-3 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#C9B7A5]"
+              >
+                {DROP_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-1.5">

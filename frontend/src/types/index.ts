@@ -15,6 +15,7 @@ export interface Collection {
   code: string;
   subtitle?: string;
   season?: string;
+  category?: string;
   launch_date?: string;
   status: string;
   description?: string;
@@ -26,6 +27,7 @@ export interface ProductVariant {
   id: number;
   product_id: number;
   size: string;
+  color?: string;
   sku: string;
   opening_stock: number;
   available_stock: number;

@@ -14,7 +14,11 @@ import {
   ChevronRight,
   TrendingUp,
   Sparkles,
+  Pencil,
 } from 'lucide-react';
+import { EditDropModal } from '../components/modals/EditDropModal';
+import { Collection } from '../types';
+
 import {
   AreaChart,
   Area,
@@ -44,6 +48,7 @@ export const DashboardPage: React.FC = () => {
 
   const [data, setData] = useState<DashboardData>(() => getDashboardDataForDrop(activeCollection));
   const [loading, setLoading] = useState(false);
+  const [editingDrop, setEditingDrop] = useState<Collection | null>(null);
 
   useEffect(() => {
     // Immediately display the drop's synchronized dataset
@@ -136,103 +141,76 @@ export const DashboardPage: React.FC = () => {
           </button>
         </div>
 
-        {/* 1-Click Drop Selector Pills with Status & Details */}
+        {/* Drop cards — select + edit name/season/theme */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 pt-1">
-          {/* Drop 01 Button */}
-          <button
-            type="button"
-            onClick={() => setActiveCollection('Drop 01')}
-            className={`p-2.5 rounded-2xl text-left border transition-all relative flex flex-col justify-between ${
-              activeCollection === 'Drop 01'
-                ? 'bg-[#0B162A] text-white border-[#0B162A] shadow-md ring-2 ring-[#C9B7A5]'
-                : 'bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/80'
-            }`}
-          >
-            <div className="flex items-center justify-between w-full">
-              <span className="text-xs font-extrabold flex items-center gap-1.5">
-                <span className={`w-2 h-2 rounded-full ${activeCollection === 'Drop 01' ? 'bg-[#C9B7A5]' : 'bg-slate-400'}`}></span>
-                Drop 01
-              </span>
-              <span className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${
-                activeCollection === 'Drop 01' ? 'bg-white/20 text-[#C9B7A5]' : 'bg-slate-100 text-slate-500'
-              }`}>
-                Summer
-              </span>
-            </div>
-            <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px]">
-              <span className={activeCollection === 'Drop 01' ? 'text-slate-300' : 'text-slate-500'}>
-                {activeCollection === 'Drop 01' ? data.kpis.stock_in_hand_pieces : 0} Pcs Stock •{' '}
-                <strong className={activeCollection === 'Drop 01' ? 'text-white' : 'text-slate-900'}>
-                  ₹{activeCollection === 'Drop 01' ? Math.round(data.kpis.total_sales_inr).toLocaleString() : '0'} Sales
-                </strong>
-              </span>
-            </div>
-          </button>
-
-          {/* Drop 02 Button */}
-          <button
-            type="button"
-            onClick={() => setActiveCollection('Drop 02')}
-            className={`p-2.5 rounded-2xl text-left border transition-all relative flex flex-col justify-between ${
-              activeCollection === 'Drop 02'
-                ? 'bg-[#0B162A] text-white border-[#0B162A] shadow-md ring-2 ring-[#C9B7A5]'
-                : 'bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/80'
-            }`}
-          >
-            <div className="flex items-center justify-between w-full">
-              <span className="text-xs font-extrabold flex items-center gap-1.5">
-                <span className={`w-2 h-2 rounded-full ${activeCollection === 'Drop 02' ? 'bg-amber-400' : 'bg-slate-400'}`}></span>
-                Drop 02
-              </span>
-              <span className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${
-                activeCollection === 'Drop 02' ? 'bg-white/20 text-amber-300' : 'bg-amber-50 text-amber-700'
-              }`}>
-                Monsoon
-              </span>
-            </div>
-            <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px]">
-              <span className={activeCollection === 'Drop 02' ? 'text-slate-300' : 'text-slate-500'}>
-                {activeCollection === 'Drop 02' ? data.kpis.stock_in_hand_pieces : 0} Pcs Stock •{' '}
-                <strong className={activeCollection === 'Drop 02' ? 'text-white' : 'text-slate-900'}>
-                  ₹{activeCollection === 'Drop 02' ? Math.round(data.kpis.total_sales_inr).toLocaleString() : '0'} Sales
-                </strong>
-              </span>
-            </div>
-          </button>
-
-          {/* Dynamic Extra Drops if any (e.g. Drop 03) */}
-          {collections
-            .filter((c) => c.name !== 'Drop 01' && c.name !== 'Drop 02')
-            .map((c) => {
-              const isSelected = activeCollection === c.name;
-              return (
+          {(collections.length
+            ? collections
+            : [
+                { id: 'drop-01', name: 'Drop 01', subtitle: 'Ethereal Dawn', season: 'Summer 2026', code: 'DROP-01', status: 'active' },
+                { id: 'drop-02', name: 'Drop 02', subtitle: 'Midnight Bloom', season: 'Monsoon 2026', code: 'DROP-02', status: 'active' },
+              ] as Collection[]
+          ).map((c) => {
+            const isSelected = activeCollection === c.name;
+            const seasonTag = (c.category || c.season || 'Drop').split(/[\s/]/)[0];
+            return (
+              <div
+                key={c.id || c._id || c.name}
+                className={`p-2.5 rounded-2xl text-left border transition-all relative flex flex-col justify-between ${
+                  isSelected
+                    ? 'bg-[#0B162A] text-white border-[#0B162A] shadow-md ring-2 ring-[#C9B7A5]'
+                    : 'bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/80'
+                }`}
+              >
                 <button
-                  key={c.id || c._id || c.name}
                   type="button"
                   onClick={() => setActiveCollection(c.name)}
-                  className={`p-2.5 rounded-2xl text-left border transition-all relative flex flex-col justify-between ${
-                    isSelected
-                      ? 'bg-[#0B162A] text-white border-[#0B162A] shadow-md ring-2 ring-[#C9B7A5]'
-                      : 'bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/80'
-                  }`}
+                  className="w-full text-left"
                 >
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-xs font-extrabold flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                      {c.name}
+                  <div className="flex items-center justify-between w-full gap-1">
+                    <span className="text-xs font-extrabold flex items-center gap-1.5 min-w-0">
+                      <span className={`w-2 h-2 rounded-full shrink-0 ${isSelected ? 'bg-[#C9B7A5]' : 'bg-slate-400'}`} />
+                      <span className="truncate">{c.name}</span>
                     </span>
-                    <span className="text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider bg-purple-50 text-purple-700">
-                      {c.season || 'Upcoming'}
+                    <span
+                      className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0 ${
+                        isSelected ? 'bg-white/20 text-[#C9B7A5]' : 'bg-slate-100 text-slate-500'
+                      }`}
+                    >
+                      {seasonTag}
                     </span>
                   </div>
-                  <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px] text-slate-500">
-                    <span>{c.subtitle || 'Active boutique drop'}</span>
+                  {c.subtitle ? (
+                    <p className={`mt-1 text-[10px] truncate ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                      {c.subtitle}
+                    </p>
+                  ) : null}
+                  <div className="mt-1.5 pt-1.5 border-t border-slate-100/20 text-[10.5px]">
+                    <span className={isSelected ? 'text-slate-300' : 'text-slate-500'}>
+                      {isSelected ? data.kpis.stock_in_hand_pieces : 0} Pcs Stock •{' '}
+                      <strong className={isSelected ? 'text-white' : 'text-slate-900'}>
+                        ₹{isSelected ? Math.round(data.kpis.total_sales_inr).toLocaleString() : '0'} Sales
+                      </strong>
+                    </span>
                   </div>
                 </button>
-              );
-            })}
+                <button
+                  type="button"
+                  title="Edit drop"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingDrop(c);
+                  }}
+                  className={`mt-2 inline-flex items-center gap-1 text-[10px] font-bold ${
+                    isSelected ? 'text-[#C9B7A5] hover:text-white' : 'text-slate-500 hover:text-[#0B162A]'
+                  }`}
+                >
+                  <Pencil className="w-3 h-3" />
+                  Edit
+                </button>
+              </div>
+            );
+          })}
 
-          {/* All Drops (Combined Total) Button */}
           <button
             type="button"
             onClick={() => setActiveCollection('All Drops')}
@@ -247,9 +225,11 @@ export const DashboardPage: React.FC = () => {
                 <Layers className="w-3.5 h-3.5 text-slate-400" />
                 All Drops
               </span>
-              <span className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${
-                activeCollection === 'All Drops' ? 'bg-white/20 text-blue-300' : 'bg-slate-100 text-slate-500'
-              }`}>
+              <span
+                className={`text-[9.5px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ${
+                  activeCollection === 'All Drops' ? 'bg-white/20 text-blue-300' : 'bg-slate-100 text-slate-500'
+                }`}
+              >
                 Combined
               </span>
             </div>
@@ -680,6 +660,8 @@ export const DashboardPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      <EditDropModal drop={editingDrop} onClose={() => setEditingDrop(null)} />
     </div>
   );
 };

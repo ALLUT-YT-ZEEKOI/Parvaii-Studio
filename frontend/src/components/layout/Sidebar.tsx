@@ -6,7 +6,6 @@ import {
   Users,
   Tag,
   Layers,
-  ShoppingCart,
   FileText,
   ArrowLeftRight,
   Wallet,
@@ -41,7 +40,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const secondaryNavItems = [
     { name: 'Dress Catalog', path: '/products', icon: Tag },
-    { name: 'Purchases (Fabric)', path: '/purchases', icon: ShoppingCart },
     { name: 'Reimbursements', path: '/reimbursements', icon: ArrowLeftRight },
     { name: 'Founders / Partners', path: '/members', icon: UserCheck },
     { name: 'Settings', path: '/settings', icon: Settings },

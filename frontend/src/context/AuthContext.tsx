@@ -12,6 +12,7 @@ interface AuthContextType {
   collections: Collection[];
   refreshCollections: () => Promise<void>;
   addCollection: (newCol: Collection) => void;
+  updateCollection: (updated: Collection, previousName?: string) => void;
   dateRange: string;
   setDateRange: (d: string) => void;
   // Quick Action Modals
@@ -105,6 +106,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setActiveCollection(newCol.name);
   };
 
+  const updateCollection = (updated: Collection, previousName?: string) => {
+    setCollections((prev) => {
+      const next = prev.map((c) => {
+        const sameId = String(c.id || c._id) === String(updated.id || updated._id);
+        const sameOldName = previousName ? c.name === previousName : false;
+        return sameId || sameOldName ? { ...c, ...updated } : c;
+      });
+      localStorage.setItem('parvaii_collections', JSON.stringify(next));
+      return next;
+    });
+  };
+
   useEffect(() => {
     refreshCollections();
   }, []);
@@ -135,6 +148,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         collections,
         refreshCollections,
         addCollection,
+        updateCollection,
         dateRange,
         setDateRange,
         isNewOrderOpen,

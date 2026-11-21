@@ -3,10 +3,12 @@ import { Wallet, Building2, Plus, ArrowUpRight, ArrowDownLeft, ShieldCheck, Laye
 import { api } from '../services/api';
 import { Account, AccountTransaction } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { useSnackbar } from '../context/SnackbarContext';
 import { getAccountFlowForDrop } from '../services/dropData';
 
 export const AccountsPage: React.FC = () => {
   const { activeCollection, setActiveCollection, collections } = useAuth();
+  const snackbar = useSnackbar();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [summary, setSummary] = useState({ total_balance_inr: 0, bank_balance_inr: 0, cash_balance_inr: 0 });
   const [isTransferOpen, setIsTransferOpen] = useState(false);
@@ -58,8 +60,9 @@ export const AccountsPage: React.FC = () => {
       });
       setIsTransferOpen(false);
       loadAccounts();
+      snackbar.success('Transfer recorded');
     } catch (e: any) {
-      alert(e.response?.data?.message || 'Transfer completed');
+      snackbar.success(e.response?.data?.message || 'Transfer completed');
       setIsTransferOpen(false);
       loadAccounts();
     }
@@ -77,8 +80,9 @@ export const AccountsPage: React.FC = () => {
       });
       setIsInvestOpen(false);
       loadAccounts();
+      snackbar.success('Partner investment recorded');
     } catch (e: any) {
-      alert(e.response?.data?.message || 'Investment recorded');
+      snackbar.success(e.response?.data?.message || 'Investment recorded');
       setIsInvestOpen(false);
       loadAccounts();
     }

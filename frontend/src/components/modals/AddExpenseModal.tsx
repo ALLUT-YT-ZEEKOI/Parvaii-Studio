@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, CreditCard, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useSnackbar } from '../../context/SnackbarContext';
 import { api } from '../../services/api';
 
 export const AddExpenseModal: React.FC = () => {
-  const { isAddExpenseOpen, setIsAddExpenseOpen, collections, activeCollection } = useAuth();
+  const { isAddExpenseOpen, setIsAddExpenseOpen, collections, activeCollection, setIsAddDropOpen } = useAuth();
+  const snackbar = useSnackbar();
 
   const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedCollection, setSelectedCollection] = useState(activeCollection !== 'All Drops' ? activeCollection : 'Drop 02');
+
+  useEffect(() => {
+    if (activeCollection && activeCollection !== 'All Drops') {
+      setSelectedCollection(activeCollection);
+    }
+  }, [activeCollection, collections]);
   const [categoryId, setCategoryId] = useState('1'); // Fabric
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState<number | ''>('');
@@ -65,16 +73,15 @@ export const AddExpenseModal: React.FC = () => {
         reference_number: referenceNumber,
       });
 
-      setMessage('Expense recorded successfully!');
-      setTimeout(() => {
-        setIsAddExpenseOpen(false);
-        setMessage('');
-        window.location.reload();
-      }, 1000);
+      snackbar.success('Expense recorded successfully');
+      setIsAddExpenseOpen(false);
+      setMessage('');
+      window.location.reload();
     } catch (err: any) {
       console.error('[Add Expense Error]', err);
       const errMsg = err.response?.data?.message || err.message || 'Failed to save expense';
       setMessage(`Error: ${errMsg}`);
+      snackbar.error(errMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -195,12 +202,27 @@ export const AddExpenseModal: React.FC = () => {
 
           {/* Drop / Collection Assignment */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Assign Expense to Drop / Collection *
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-semibold text-slate-700">
+                Assign Expense to Drop / Collection *
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsAddDropOpen(true)}
+                className="text-[11px] font-bold text-[#0B162A] hover:text-[#C9B7A5]"
+              >
+                + Add new drop
+              </button>
+            </div>
             <select
               value={selectedCollection}
-              onChange={(e) => setSelectedCollection(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value === '__new_drop__') {
+                  setIsAddDropOpen(true);
+                  return;
+                }
+                setSelectedCollection(e.target.value);
+              }}
               className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white font-semibold text-[#0B162A] focus:outline-none focus:ring-2 focus:ring-[#C9B7A5]"
             >
               {collections.map((col) => (
@@ -209,6 +231,7 @@ export const AddExpenseModal: React.FC = () => {
                 </option>
               ))}
               <option value="General Brand Operations">General Brand Operations (Non-drop)</option>
+              <option value="__new_drop__">+ Create new drop / collection…</option>
             </select>
           </div>
 

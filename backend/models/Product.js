@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const productVariantSchema = new mongoose.Schema({
   product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
   size: { type: String, required: true },
+  color: { type: String, default: 'Default' },
   sku: { type: String, required: true },
   opening_stock: { type: Number, default: 0 },
   available_stock: { type: Number, default: 0 },

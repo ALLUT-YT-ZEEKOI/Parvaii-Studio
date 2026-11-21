@@ -7,6 +7,7 @@ import { Customer } from '../models/Customer.js';
 import { Reimbursement } from '../models/Reimbursement.js';
 import { Collection } from '../models/Collection.js';
 import { Account, AccountTransaction } from '../models/Account.js';
+import { Investment } from '../models/Investment.js';
 
 dotenv.config();
 
@@ -22,13 +23,14 @@ async function clearDemoData() {
     await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 8000 });
     console.log('Connected to MongoDB Atlas!');
 
-    const [orders, expenses, products, customers, reimbursements, transactions] = await Promise.all([
+    const [orders, expenses, products, customers, reimbursements, transactions, investments] = await Promise.all([
       Order.deleteMany({}),
       Expense.deleteMany({}),
       Product.deleteMany({}),
       Customer.deleteMany({}),
       Reimbursement.deleteMany({}),
       AccountTransaction.deleteMany({}),
+      Investment.deleteMany({}),
     ]);
 
     await Collection.updateMany({}, { products_count: 0, orders_count: 0 });
@@ -44,6 +46,7 @@ async function clearDemoData() {
     console.log(`   - Customers deleted: ${customers.deletedCount}`);
     console.log(`   - Reimbursements deleted: ${reimbursements.deletedCount}`);
     console.log(`   - Account transactions deleted: ${transactions.deletedCount}`);
+    console.log(`   - Investments deleted: ${investments.deletedCount}`);
     console.log(`   - Accounts zeroed: ${accounts.modifiedCount}`);
     console.log('✨ Balances, stock, sales & claims are now ₹0 / 0.');
     console.log('====================================================');

@@ -30,10 +30,10 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         return { title: 'Customers (CRM)', subtitle: 'Customer profiles, purchase history & birthdays' };
       case '/products':
         return { title: 'Products', subtitle: 'Collection catalog, dress variants & sizes' };
+      case '/products/new':
+        return { title: 'Add Dress', subtitle: 'New dress with colors & sizes' };
       case '/inventory':
         return { title: 'Inventory', subtitle: 'Stock reservation, warehouse levels & audit movements' };
-      case '/purchases':
-        return { title: 'Purchases', subtitle: 'Raw material procurement, fabric & stitching bills' };
       case '/expenses':
         return { title: 'Expenses', subtitle: 'Company-paid & personally funded business expenditures' };
       case '/reimbursements':

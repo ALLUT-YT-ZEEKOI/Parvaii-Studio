@@ -8,7 +8,10 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "seed": "node seed.js",
-    "db:clear": "node scripts/clear-demo-data.js"
+    "db:clear": "node scripts/clear-demo-data.js",
+    "db:invest": "node scripts/seed-partner-investments.js",
+    "db:drop01-expenses": "node scripts/seed-drop01-expenses.js",
+    "db:drop02-expenses": "node scripts/seed-drop02-expenses.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

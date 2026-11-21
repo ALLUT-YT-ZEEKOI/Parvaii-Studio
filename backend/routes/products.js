@@ -183,25 +183,65 @@ router.post('/', async (req, res) => {
     const collectionName = p.collection_name || p.collection_id || 'Drop 01';
     const costPricePaise = Math.round(Number(p.cost_price_inr || p.cost_price || 0) * 100);
     const sellingPricePaise = Math.round(Number(p.selling_price_inr || p.selling_price || 0) * 100);
+    const baseSku = p.sku || `PV-${Date.now().toString().slice(-4)}`;
+    const sizes = Array.isArray(p.sizes) && p.sizes.length ? p.sizes : ['XS', 'S', 'M', 'L', 'XL'];
+
+    // Color options: [{ color: 'Yellow', size_qty: { XS: 2, S: 3, M: 1 } }]
+    let colorRows = Array.isArray(p.colors) ? p.colors.filter((c) => c && (c.color || c.name)) : [];
+    if (!colorRows.length && p.color) {
+      colorRows = [{ color: p.color, stock: Number(p.stock || 0) }];
+    }
+    if (!colorRows.length) {
+      colorRows = [{ color: 'Default', size_qty: Object.fromEntries(sizes.map((s) => [s, 0])) }];
+    }
+
+    const variants = [];
+    colorRows.forEach((row) => {
+      const colorName = String(row.color || row.name || 'Default').trim();
+      const colorCode = colorName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase() || 'CLR';
+      const sizeQty = row.size_qty && typeof row.size_qty === 'object' ? row.size_qty : null;
+
+      sizes.forEach((size) => {
+        let stock = 0;
+        if (sizeQty && sizeQty[size] != null) {
+          stock = Math.max(0, Number(sizeQty[size]) || 0);
+        } else if (row.stock != null) {
+          // Legacy: split total stock evenly across sizes
+          const totalStock = Math.max(0, Number(row.stock || 0));
+          const perSize = Math.floor(totalStock / sizes.length);
+          const remainder = totalStock - perSize * sizes.length;
+          const idx = sizes.indexOf(size);
+          stock = perSize + (idx < remainder ? 1 : 0);
+        }
+
+        variants.push({
+          size,
+          color: colorName,
+          sku: `${baseSku}-${colorCode}-${size}`,
+          opening_stock: stock,
+          available_stock: stock,
+          reserved_stock: 0,
+          sold_stock: 0,
+          damaged_stock: 0,
+        });
+      });
+    });
+
+    const primaryColor = colorRows[0]?.color || colorRows[0]?.name || 'Default';
 
     const newProd = await Product.create({
       name: p.name,
-      sku: p.sku || `PV-${Date.now().toString().slice(-4)}`,
+      sku: baseSku,
       category: p.category || 'Dresses',
       fabric: p.fabric || 'Cotton',
+      color: primaryColor,
       collection_name: collectionName,
       collection_id: p.collection_id,
       cost_price_paise: costPricePaise,
       selling_price_paise: sellingPricePaise,
       image_url: p.image_url,
       status: 'active',
-      variants: [
-        { size: 'XS', sku: `${p.sku || 'PV'}-XS`, available_stock: 2 },
-        { size: 'S',  sku: `${p.sku || 'PV'}-S`,  available_stock: 4 },
-        { size: 'M',  sku: `${p.sku || 'PV'}-M`,  available_stock: 4 },
-        { size: 'L',  sku: `${p.sku || 'PV'}-L`,  available_stock: 3 },
-        { size: 'XL', sku: `${p.sku || 'PV'}-XL`, available_stock: 2 },
-      ]
+      variants,
     });
 
     return res.status(201).json({

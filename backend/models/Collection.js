@@ -5,6 +5,7 @@ const collectionSchema = new mongoose.Schema({
   code: { type: String, required: true, unique: true },
   subtitle: { type: String },
   season: { type: String },
+  category: { type: String, default: 'Dresses' },
   launch_date: { type: String },
   status: { type: String, enum: ['active', 'archived', 'upcoming'], default: 'active' },
   description: { type: String },
