@@ -6,10 +6,7 @@ import {
   BarChart2,
   Building2,
   Users,
-  Plus,
   CreditCard,
-  ShoppingCart,
-  IndianRupee,
   ArrowUpRight,
   Cake,
   MessageCircle,
@@ -42,8 +39,6 @@ export const DashboardPage: React.FC = () => {
     dateRange,
     setIsNewOrderOpen,
     setIsAddExpenseOpen,
-    setIsAddPurchaseOpen,
-    setIsReceivePaymentOpen,
     setIsAddDropOpen,
   } = useAuth();
 
@@ -294,11 +289,11 @@ export const DashboardPage: React.FC = () => {
           <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-[11.5px] text-slate-300">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-              Bank: <strong className="text-white">₹{data.kpis?.bank_balance_inr?.toLocaleString() || '12,500'}</strong>
+              Bank: <strong className="text-white">₹{(data.kpis?.bank_balance_inr ?? 0).toLocaleString()}</strong>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              Cash: <strong className="text-white">₹{data.kpis?.cash_balance_inr?.toLocaleString() || '3,743'}</strong>
+              Cash: <strong className="text-white">₹{(data.kpis?.cash_balance_inr ?? 0).toLocaleString()}</strong>
             </span>
           </div>
         </div>
@@ -408,7 +403,7 @@ export const DashboardPage: React.FC = () => {
             </span>
           </div>
           <div className="mt-2.5 text-xs text-[#64748B] font-semibold">
-            Bank: ₹{data.kpis?.bank_balance_inr?.toLocaleString() || '12,500'} • Cash: ₹{data.kpis?.cash_balance_inr?.toLocaleString() || '3,743'}
+            Bank: ₹{(data.kpis?.bank_balance_inr ?? 0).toLocaleString()} • Cash: ₹{(data.kpis?.cash_balance_inr ?? 0).toLocaleString()}
           </div>
         </div>
 
@@ -496,11 +491,11 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          SECOND ROW: Trend Chart (55%), Donut Chart (25%), Quick Actions (20%)
+          SECOND ROW: Trend Chart + Donut Chart
       ────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Sales & Expenses Trend */}
-        <div className="lg:col-span-6 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card">
+        <div className="lg:col-span-8 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-[#0B162A]">Sales & Expenses Trend</h3>
             <div className="flex items-center gap-4 text-xs font-semibold">
@@ -548,7 +543,7 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Order Status Donut */}
-        <div className="lg:col-span-3 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
           <h3 className="text-sm font-bold text-[#0B162A]">Order Status</h3>
 
           <div className="flex items-center justify-center my-1 relative">
@@ -614,230 +609,14 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Quick Actions (2x2 Grid) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
-          <h3 className="text-sm font-bold text-[#0B162A]">Quick Actions</h3>
-
-          <div className="grid grid-cols-2 gap-3 my-auto pt-2">
-            {/* New Order: Solid Navy button */}
-            <button
-              onClick={() => setIsNewOrderOpen(true)}
-              className="flex flex-col items-center justify-center p-3.5 bg-[#0B162A] text-white rounded-xl hover:bg-[#162544] shadow-sm transition-all group"
-            >
-              <div className="w-7 h-7 rounded-full border border-white/30 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
-                <Plus className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-semibold">New Order</span>
-            </button>
-
-            {/* Add Expense: Light Card */}
-            <button
-              onClick={() => setIsAddExpenseOpen(true)}
-              className="flex flex-col items-center justify-center p-3.5 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl hover:bg-slate-100 hover:border-slate-300 shadow-sm transition-all group"
-            >
-              <CreditCard className="w-5 h-5 text-slate-700 mb-1.5 group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold">Add Expense</span>
-            </button>
-
-            {/* Add Purchase */}
-            <button
-              onClick={() => setIsAddPurchaseOpen(true)}
-              className="flex flex-col items-center justify-center p-3.5 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl hover:bg-slate-100 hover:border-slate-300 shadow-sm transition-all group"
-            >
-              <ShoppingCart className="w-5 h-5 text-slate-700 mb-1.5 group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold">Add Purchase</span>
-            </button>
-
-            {/* Receive Payment */}
-            <button
-              onClick={() => setIsReceivePaymentOpen(true)}
-              className="flex flex-col items-center justify-center p-3.5 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl hover:bg-slate-100 hover:border-slate-300 shadow-sm transition-all group"
-            >
-              <IndianRupee className="w-5 h-5 text-slate-700 mb-1.5 group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold">Receive Payment</span>
-            </button>
-          </div>
-
-          <div className="pt-2 text-center">
-            <span className="text-[11px] text-slate-400">Direct database transactional actions</span>
-          </div>
-        </div>
       </div>
 
       {/* ──────────────────────────────────────────────────────────
-          THIRD ROW: Recent Orders (60%), Low Stock Alert (40%)
+          FOURTH ROW: Today's Birthdays
       ────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Recent Orders Table */}
-        <div className="lg:col-span-7 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-[#0B162A]">Recent Orders</h3>
-            <Link
-              to="/orders"
-              className="text-xs font-semibold text-[#0B162A] hover:text-[#C9B7A5] flex items-center gap-1 transition-colors"
-            >
-              View All →
-            </Link>
-          </div>
-
-          <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0">
-            <table className="w-full min-w-[500px] sm:min-w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-slate-100 text-[#64748B]">
-                  <th className="pb-3 font-semibold">#</th>
-                  <th className="pb-3 font-semibold">Customer</th>
-                  <th className="pb-3 font-semibold">Product</th>
-                  <th className="pb-3 font-semibold text-center">Qty</th>
-                  <th className="pb-3 font-semibold">Amount</th>
-                  <th className="pb-3 font-semibold text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {data.recent_orders?.map((order) => (
-                  <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="py-3 font-semibold text-[#0B162A]">
-                      {order.order_number}
-                    </td>
-                    <td className="py-3 font-medium text-slate-800">
-                      {order.customer_name}
-                    </td>
-                    <td className="py-3">
-                      <div className="flex items-center gap-2.5">
-                        <img
-                          src={order.product_image || 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=80&q=80'}
-                          alt={order.product_name}
-                          className="w-8 h-8 rounded-lg object-cover border border-slate-100 flex-shrink-0"
-                        />
-                        <span className="font-medium text-slate-700 truncate max-w-[150px]">
-                          {order.product_name}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="py-3 text-center text-slate-700 font-medium">
-                      {order.quantity}
-                    </td>
-                    <td className="py-3 font-bold text-[#0B162A]">
-                      ₹{order.amount_inr?.toLocaleString()}
-                    </td>
-                    <td className="py-3 text-right">
-                      <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize ${
-                          order.status === 'sold'
-                            ? 'bg-status-sold-bg text-status-sold-text'
-                            : order.status === 'processing'
-                            ? 'bg-status-processing-bg text-status-processing-text'
-                            : 'bg-status-pending-bg text-status-pending-text'
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Low Stock Alert */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-[#0B162A]">Low Stock Alert</h3>
-            <Link
-              to="/inventory"
-              className="text-xs font-semibold text-[#0B162A] hover:text-[#C9B7A5] flex items-center gap-1 transition-colors"
-            >
-              View Inventory →
-            </Link>
-          </div>
-
-          <div className="space-y-3.5">
-            {data.low_stock_alerts?.slice(0, 3).map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <img
-                    src={item.image_url || 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=80&q=80'}
-                    alt={item.name}
-                    className="w-10 h-10 rounded-xl object-cover border border-slate-100 flex-shrink-0"
-                  />
-                  <div>
-                    <h4 className="text-xs font-bold text-[#0B162A]">{item.name}</h4>
-                    <p className="text-[11px] text-slate-500 font-medium">
-                      {item.sizes_range} | Current: {item.available_stock}
-                    </p>
-                  </div>
-                </div>
-
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold text-rose-600 bg-rose-50 border border-rose-100">
-                  {item.available_stock} left
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Threshold: &lt; 15 pieces per size</span>
-            <Link to="/purchases" className="text-xs font-semibold text-[#0B162A] hover:underline">
-              Create Material Bill +
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* ──────────────────────────────────────────────────────────
-          FOURTH ROW: Customer Overview (60%), Today's Birthdays (40%)
-      ────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Customer Overview */}
-        <div className="lg:col-span-7 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="w-4 h-4 text-slate-600" />
-            <h3 className="text-sm font-bold text-[#0B162A]">Customer Overview</h3>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1 pb-2">
-            <div>
-              <span className="text-2xl font-extrabold text-[#0B162A] block">
-                {data.customer_overview?.total_customers ?? 0}
-              </span>
-              <span className="text-xs text-[#64748B] font-medium">Total Customers</span>
-            </div>
-
-            <div>
-              <span className="text-2xl font-extrabold text-[#0B162A] block">
-                {data.customer_overview?.repeat_customers ?? 0}
-              </span>
-              <span className="text-xs text-[#64748B] font-medium">Repeat Customers</span>
-            </div>
-
-            <div>
-              <div className="flex items-center gap-1.5">
-                <Cake className="w-4 h-4 text-pink-500" />
-                <span className="text-2xl font-extrabold text-[#0B162A]">
-                  {data.customer_overview?.birthdays_this_week ?? 0}
-                </span>
-              </div>
-              <span className="text-xs text-[#64748B] font-medium">Birthdays This Week</span>
-            </div>
-
-            <div>
-              <div className="flex items-center gap-1.5">
-                <ShoppingBag className="w-4 h-4 text-[#C9B7A5]" />
-                <span className="text-2xl font-extrabold text-[#0B162A]">
-                  ₹{data.customer_overview?.avg_order_value_inr?.toLocaleString() || '1,297'}
-                </span>
-              </div>
-              <span className="text-xs text-[#64748B] font-medium">Avg. Order Value</span>
-            </div>
-          </div>
-        </div>
-
+      <div className="grid grid-cols-1 gap-6">
         {/* Today's Birthdays */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-card flex flex-col justify-between">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Cake className="w-4 h-4 text-pink-500" />

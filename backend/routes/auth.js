@@ -4,9 +4,9 @@ import { User } from '../models/User.js';
 const router = express.Router();
 
 const DEMO_USERS = [
-  { id: '1', name: 'Allu', email: 'allu@parvaii.com', role: 'admin', phone: '+91 98765 00001', status: 'active' },
-  { id: '2', name: 'Paru', email: 'paru@parvaii.com', role: 'partner', phone: '+91 98765 00002', status: 'active' },
-  { id: '3', name: 'Kathu', email: 'kathu@parvaii.com', role: 'partner', phone: '+91 98765 00003', status: 'active' },
+  { id: '1', name: 'Allu', email: 'allu@parvaii.com', role: 'admin', title: 'Co-Founder & Chief Technology Officer (CTO)', phone: '+91 98765 00001', status: 'active' },
+  { id: '2', name: 'Paru', email: 'paru@parvaii.com', role: 'partner', title: 'Co-Founder & Creative Director', phone: '+91 98765 00002', status: 'active' },
+  { id: '3', name: 'Kathu', email: 'kathu@parvaii.com', role: 'partner', title: 'Co-Founder & Social Media Manager', phone: '+91 98765 00003', status: 'active' },
 ];
 
 router.post('/login', async (req, res) => {

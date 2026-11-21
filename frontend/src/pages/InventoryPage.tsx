@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Layers, AlertTriangle, Search, History, ArrowDown, ArrowUp } from 'lucide-react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { getInventoryForDrop } from '../services/dropData';
-
 export const InventoryPage: React.FC = () => {
   const { activeCollection, setActiveCollection } = useAuth();
   const [variants, setVariants] = useState<any[]>([]);
@@ -44,17 +42,16 @@ export const InventoryPage: React.FC = () => {
   const loadMovements = () => {
     api.get('/inventory/movements')
       .then((res) => {
-        if (res.data?.data) {
+        if (res.data?.data && Array.isArray(res.data.data)) {
           setMovements(res.data.data);
         } else if (Array.isArray(res.data)) {
           setMovements(res.data);
+        } else {
+          setMovements([]);
         }
       })
       .catch(() => {
-        setMovements([
-          { id: 1, movement_type: 'order_reserved', quantity: -1, available_before: 2, available_after: 1, reserved_before: 0, reserved_after: 1, notes: 'Reserved for ORD-010', created_at: '2026-07-28 14:30' },
-          { id: 2, movement_type: 'order_fulfilled', quantity: -1, available_before: 1, available_after: 1, reserved_before: 1, reserved_after: 0, notes: 'Order ORD-010 delivered', created_at: '2026-07-28 16:45' },
-        ]);
+        setMovements([]);
       });
   };
 
@@ -325,31 +322,39 @@ export const InventoryPage: React.FC = () => {
             </h3>
           </div>
           <div className="divide-y divide-slate-100 text-xs">
-            {movements.map((m) => (
-              <div key={m.id} className="p-4 flex items-center justify-between hover:bg-slate-50">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
-                    m.quantity < 0 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'
-                  }`}>
-                    {m.quantity < 0 ? <ArrowDown className="w-4 h-4" /> : <ArrowUp className="w-4 h-4" />}
-                  </div>
-                  <div>
-                    <span className="font-bold text-[#0B162A] capitalize block">
-                      {m.movement_type?.replace('_', ' ')}
-                    </span>
-                    <span className="text-[11px] text-slate-500">{m.notes}</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className={`font-bold block ${m.quantity < 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
-                    {m.quantity > 0 ? `+${m.quantity}` : m.quantity} pcs
-                  </span>
-                  <span className="text-[11px] text-slate-400">
-                    Avail: {m.available_before} → {m.available_after}
-                  </span>
-                </div>
+            {movements.length === 0 ? (
+              <div className="p-10 text-center text-slate-400">
+                <History className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                <p className="font-medium text-slate-500">No movements yet</p>
+                <p className="text-[11px] mt-1">Stock changes will appear here as an audit trail.</p>
               </div>
-            ))}
+            ) : (
+              movements.map((m) => (
+                <div key={m.id} className="p-4 flex items-center justify-between hover:bg-slate-50">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
+                      m.quantity < 0 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'
+                    }`}>
+                      {m.quantity < 0 ? <ArrowDown className="w-4 h-4" /> : <ArrowUp className="w-4 h-4" />}
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#0B162A] capitalize block">
+                        {m.movement_type?.replace('_', ' ')}
+                      </span>
+                      <span className="text-[11px] text-slate-500">{m.notes}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className={`font-bold block ${m.quantity < 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
+                      {m.quantity > 0 ? `+${m.quantity}` : m.quantity} pcs
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      Avail: {m.available_before} → {m.available_after}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}

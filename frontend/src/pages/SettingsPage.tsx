@@ -35,11 +35,7 @@ export const SettingsPage: React.FC = () => {
         }
       })
       .catch(() => {
-        setAuditLogs([
-          { id: 1, action: 'order_created', entity_type: 'Order', entity_id: 10, user: { name: 'Allu' }, created_at: '2026-07-28 14:30:10' },
-          { id: 2, action: 'reimbursement_settled', entity_type: 'ReimbursementSettlement', entity_id: 1, user: { name: 'Allu' }, created_at: '2026-07-28 15:10:22' },
-          { id: 3, action: 'stock_adjusted', entity_type: 'InventoryMovement', entity_id: 4, user: { name: 'Aishwarya M.' }, created_at: '2026-07-28 16:40:05' },
-        ]);
+        setAuditLogs([]);
       });
   }, []);
 
@@ -168,22 +164,28 @@ export const SettingsPage: React.FC = () => {
             <span className="text-[11px] text-slate-400">Strictly recorded per financial transaction</span>
           </div>
           <div className="divide-y divide-slate-100 text-xs">
-            {auditLogs.map((log) => (
-              <div key={log.id} className="p-4 flex items-center justify-between hover:bg-slate-50">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
-                    <History className="w-4 h-4" />
+            {auditLogs.length > 0 ? (
+              auditLogs.map((log) => (
+                <div key={log.id} className="p-4 flex items-center justify-between hover:bg-slate-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+                      <History className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#0B162A] capitalize block">
+                        {log.action?.replace('_', ' ')}: {log.entity_type} #{log.entity_id}
+                      </span>
+                      <span className="text-[11px] text-slate-500">Performed by {log.user?.name || 'Administrator'}</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-bold text-[#0B162A] capitalize block">
-                      {log.action?.replace('_', ' ')}: {log.entity_type} #{log.entity_id}
-                    </span>
-                    <span className="text-[11px] text-slate-500">Performed by {log.user?.name || 'Administrator'}</span>
-                  </div>
+                  <span className="text-slate-400 font-mono text-[11px]">{log.created_at}</span>
                 </div>
-                <span className="text-slate-400 font-mono text-[11px]">{log.created_at}</span>
+              ))
+            ) : (
+              <div className="p-6 text-center text-slate-500">
+                No audit activity yet.
               </div>
-            ))}
+            )}
           </div>
         </div>
       )}

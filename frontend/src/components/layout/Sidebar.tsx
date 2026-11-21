@@ -14,13 +14,10 @@ import {
   BarChart2,
   Settings,
   ShoppingBag,
-  ArrowRight,
   X,
   ChevronDown,
   SlidersHorizontal,
-  Sparkles,
 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -28,7 +25,6 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const { activeCollection, collections } = useAuth();
   const location = useLocation();
 
   // Initially closed so the sidebar remains clean and focused on essentials
@@ -36,7 +32,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const primaryNavItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-    { name: 'Drops & Collections', path: '/collections', icon: Sparkles, badge: `${collections.length}` },
     { name: 'Balance & Cash', path: '/accounts', icon: Wallet },
     { name: 'Expenses', path: '/expenses', icon: FileText },
     { name: 'Stock Manage', path: '/inventory', icon: Layers },
@@ -212,28 +207,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Bottom Active Collection Pill */}
-        <div className="p-3 pt-2 border-t border-[#1A2740] shrink-0">
-          <NavLink
-            to="/collections"
-            className="group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-[#111C33] to-[#182848] border border-slate-700/50 hover:border-[#C9B7A5]/50 transition-all duration-200"
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#0B162A] flex items-center justify-center border border-slate-700/80 p-1 shrink-0">
-                <img src="/parvaii-symbol-beige.png" alt="PARVAII" className="w-4 h-4 object-contain" />
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xs font-semibold text-white tracking-wide">
-                  {activeCollection}
-                </span>
-                <span className="text-[10px] text-[#C9B7A5] font-medium">
-                  Active Drop • Manage →
-                </span>
-              </div>
-            </div>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#C9B7A5] group-hover:translate-x-0.5 transition-all shrink-0" />
-          </NavLink>
-        </div>
       </aside>
     </>
   );

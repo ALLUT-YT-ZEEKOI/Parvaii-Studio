@@ -17,7 +17,7 @@ export const MembersPage: React.FC = () => {
         setMembers([
           {
             id: 1,
-            title: 'Managing Partner & Operations',
+            title: 'Co-Founder & Chief Technology Officer (CTO)',
             equity_percentage: 34.0,
             status: 'active',
             user: { name: 'Allu', email: 'allu@parvaii.com', phone: '+91 98765 00001', role: 'admin' },
@@ -25,7 +25,7 @@ export const MembersPage: React.FC = () => {
           },
           {
             id: 2,
-            title: 'Creative Director & Styling',
+            title: 'Co-Founder & Creative Director',
             equity_percentage: 33.0,
             status: 'active',
             user: { name: 'Paru', email: 'paru@parvaii.com', phone: '+91 98765 00002', role: 'partner' },
@@ -33,7 +33,7 @@ export const MembersPage: React.FC = () => {
           },
           {
             id: 3,
-            title: 'Sourcing & Production Lead',
+            title: 'Co-Founder & Social Media Manager',
             equity_percentage: 33.0,
             status: 'active',
             user: { name: 'Kathu', email: 'kathu@parvaii.com', phone: '+91 98765 00003', role: 'partner' },

@@ -4,16 +4,7 @@ import {
   Menu,
   Search,
   Bell,
-  Calendar,
-  ChevronDown,
-  Plus,
-  ShoppingBag,
-  CreditCard,
-  ShoppingCart,
-  IndianRupee,
   LogOut,
-  Sparkles,
-  Layers,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -24,24 +15,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    user,
-    logout,
-    activeCollection,
-    setActiveCollection,
-    collections,
-    dateRange,
-    setDateRange,
-    setIsNewOrderOpen,
-    setIsAddExpenseOpen,
-    setIsAddPurchaseOpen,
-    setIsReceivePaymentOpen,
-    setIsAddDropOpen,
-  } = useAuth();
-
-  const [isCollectionDropdownOpen, setIsCollectionDropdownOpen] = useState(false);
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
-  const [isAddNewDropdownOpen, setIsAddNewDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -174,219 +148,14 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
       </div>
 
       {/* Invisible backdrop to close any open dropdown on click-outside */}
-      {(isCollectionDropdownOpen || isDateDropdownOpen || isAddNewDropdownOpen || isProfileDropdownOpen) && (
+      {isProfileDropdownOpen && (
         <div
           className="fixed inset-0 z-30 bg-transparent cursor-default"
           onClick={() => {
-            setIsCollectionDropdownOpen(false);
-            setIsDateDropdownOpen(false);
-            setIsAddNewDropdownOpen(false);
             setIsProfileDropdownOpen(false);
           }}
         />
       )}
-
-      {/* Filter Row: Dropdown, Date Range, + Add New */}
-      <div className="flex items-center justify-between gap-2.5 mt-3 pt-1 overflow-x-auto no-scrollbar relative z-30">
-        {/* Left Filters */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Collection / Drop Selector */}
-          <div className="relative shrink-0">
-            <button
-              onClick={() => {
-                setIsDateDropdownOpen(false);
-                setIsAddNewDropdownOpen(false);
-                setIsProfileDropdownOpen(false);
-                setIsCollectionDropdownOpen(!isCollectionDropdownOpen);
-              }}
-              className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#0B162A] text-xs font-semibold rounded-xl border border-[#E5E7EB] hover:border-slate-300 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
-            >
-              <span className="w-2.5 h-2.5 rounded-full bg-[#C9B7A5]"></span>
-              <span className="font-bold">{activeCollection}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
-            </button>
-
-            {isCollectionDropdownOpen && (
-              <div className="absolute left-0 mt-1.5 w-60 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-40 animate-in fade-in zoom-in-95 duration-100">
-                <div className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Switch Active Boutique Drop
-                </div>
-
-                {/* Option 1: All Drops */}
-                <button
-                  onClick={() => {
-                    setActiveCollection('All Drops');
-                    setIsCollectionDropdownOpen(false);
-                  }}
-                  className={`w-full text-left px-3.5 py-2.5 text-xs flex items-center justify-between hover:bg-slate-50 transition-colors ${
-                    activeCollection === 'All Drops' ? 'font-bold text-[#0B162A] bg-slate-100/70' : 'text-slate-600'
-                  }`}
-                >
-                  <span className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-slate-600" />
-                    <span>All Drops</span>
-                  </span>
-                  <span className="text-[10px] bg-slate-200/60 px-2 py-0.5 rounded-full text-slate-600 font-semibold">
-                    Combined
-                  </span>
-                </button>
-
-                <div className="my-1.5 border-t border-slate-100" />
-
-                {/* Collection Items */}
-                {collections.map((col) => {
-                  const isSelected = activeCollection === col.name;
-                  return (
-                    <button
-                      key={col.id || col._id || col.name}
-                      onClick={() => {
-                        setActiveCollection(col.name);
-                        setIsCollectionDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-3.5 py-2.5 text-xs flex items-center justify-between hover:bg-slate-50 transition-colors ${
-                        isSelected ? 'font-bold text-[#0B162A] bg-amber-50/50' : 'text-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-amber-600 ring-2 ring-amber-200' : 'bg-slate-300'}`}></span>
-                        <span>{col.name}</span>
-                        {col.subtitle && (
-                          <span className="text-[10.5px] text-slate-400 font-normal">
-                            ({col.subtitle})
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
-                        {col.season || col.status}
-                      </span>
-                    </button>
-                  );
-                })}
-
-                <div className="my-1.5 border-t border-slate-100" />
-
-                {/* Add New Drop Action Button */}
-                <button
-                  onClick={() => {
-                    setIsCollectionDropdownOpen(false);
-                    setIsAddDropOpen(true);
-                  }}
-                  className="w-full text-left px-3.5 py-2 text-xs text-purple-700 hover:bg-purple-50 flex items-center gap-2 font-bold transition-colors"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                  <span>+ Add Next Drop</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Date Range Selector */}
-          <div className="relative shrink-0">
-            <button
-              onClick={() => {
-                setIsCollectionDropdownOpen(false);
-                setIsAddNewDropdownOpen(false);
-                setIsProfileDropdownOpen(false);
-                setIsDateDropdownOpen(!isDateDropdownOpen);
-              }}
-              className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#0B162A] text-xs font-medium rounded-xl border border-[#E5E7EB] hover:border-slate-300 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
-            >
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>{dateRange}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
-            </button>
-
-            {isDateDropdownOpen && (
-              <div className="absolute left-0 mt-1.5 w-60 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-40 animate-in fade-in zoom-in-95 duration-100">
-                <div className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Filter Date Range
-                </div>
-                {[
-                  { label: 'All Time (Drop Lifespan)', desc: 'Show full history for active drop' },
-                  { label: 'Jul 1, 2026 – Jul 31, 2026', desc: 'July 2026 sales period' },
-                  { label: 'Last 30 Days', desc: 'Past month activity' },
-                  { label: 'Full Year 2026', desc: 'Entire 2026 fiscal cycle' },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={() => {
-                      setDateRange(item.label);
-                      setIsDateDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-3.5 py-2 text-xs flex flex-col hover:bg-slate-50 transition-colors ${
-                      dateRange === item.label ? 'font-bold text-[#0B162A] bg-slate-100/70' : 'text-slate-700'
-                    }`}
-                  >
-                    <span>{item.label}</span>
-                    <span className="text-[10px] text-slate-400 font-normal">{item.desc}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right: + Add New Primary Button */}
-        <div className="relative shrink-0">
-          <button
-            onClick={() => {
-              setIsCollectionDropdownOpen(false);
-              setIsDateDropdownOpen(false);
-              setIsProfileDropdownOpen(false);
-              setIsAddNewDropdownOpen(!isAddNewDropdownOpen);
-            }}
-            className="flex items-center gap-2 px-4 py-1.5 bg-[#0B162A] text-white text-xs font-semibold rounded-xl hover:bg-[#162544] shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0B162A]/20"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>+ Add New</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-300" />
-          </button>
-
-          {isAddNewDropdownOpen && (
-            <div
-              className="absolute right-0 mt-1.5 w-52 bg-white rounded-2xl shadow-2xl border border-slate-200 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-100"
-              onClick={() => setIsAddNewDropdownOpen(false)}
-            >
-              <button
-                onClick={() => setIsNewOrderOpen(true)}
-                className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors"
-              >
-                <ShoppingBag className="w-3.5 h-3.5 text-blue-600" />
-                <span>New Order</span>
-              </button>
-              <button
-                onClick={() => setIsAddExpenseOpen(true)}
-                className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors"
-              >
-                <CreditCard className="w-3.5 h-3.5 text-rose-600" />
-                <span>Add Expense</span>
-              </button>
-              <button
-                onClick={() => setIsAddPurchaseOpen(true)}
-                className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors"
-              >
-                <ShoppingCart className="w-3.5 h-3.5 text-amber-600" />
-                <span>Add Purchase</span>
-              </button>
-              <button
-                onClick={() => setIsReceivePaymentOpen(true)}
-                className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors"
-              >
-                <IndianRupee className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Receive Payment</span>
-              </button>
-              <div className="my-1 border-t border-slate-100" />
-              <button
-                onClick={() => setIsAddDropOpen(true)}
-                className="w-full text-left px-3.5 py-2 text-xs text-purple-700 hover:bg-purple-50 flex items-center gap-2.5 transition-colors font-semibold"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                <span>New Collection / Drop</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
     </header>
   );
 };

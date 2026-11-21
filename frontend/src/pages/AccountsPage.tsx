@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Wallet, Building2, ArrowLeftRight, Plus, ArrowUpRight, ArrowDownLeft, ShieldCheck, Layers, TrendingUp, TrendingDown } from 'lucide-react';
+import { Wallet, Building2, Plus, ArrowUpRight, ArrowDownLeft, ShieldCheck, Layers, TrendingUp, TrendingDown } from 'lucide-react';
 import { api } from '../services/api';
 import { Account, AccountTransaction } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -172,14 +172,6 @@ export const AccountsPage: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setIsTransferOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 bg-white text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold hover:bg-slate-50 shadow-sm transition-all"
-          >
-            <ArrowLeftRight className="w-4 h-4 text-slate-500" />
-            <span>Internal Transfer</span>
-          </button>
-
-          <button
             onClick={() => setIsInvestOpen(true)}
             className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#0B162A] text-white rounded-xl text-xs font-semibold hover:bg-[#162544] shadow-sm transition-all"
           >
@@ -284,8 +276,8 @@ export const AccountsPage: React.FC = () => {
                   onChange={(e) => setFromAccount(e.target.value)}
                   className="w-full px-3 py-2 border rounded-xl bg-white"
                 >
-                  <option value="1">HDFC Bank (₹12,500)</option>
-                  <option value="2">Studio Cash Box (₹3,743)</option>
+                  <option value="1">HDFC Bank</option>
+                  <option value="2">Studio Cash Box</option>
                 </select>
               </div>
               <div>
@@ -295,8 +287,8 @@ export const AccountsPage: React.FC = () => {
                   onChange={(e) => setToAccount(e.target.value)}
                   className="w-full px-3 py-2 border rounded-xl bg-white"
                 >
-                  <option value="2">Studio Cash Box (₹3,743)</option>
-                  <option value="1">HDFC Bank (₹12,500)</option>
+                  <option value="2">Studio Cash Box</option>
+                  <option value="1">HDFC Bank</option>
                 </select>
               </div>
               <div>
@@ -353,9 +345,9 @@ export const AccountsPage: React.FC = () => {
                   onChange={(e) => setInvestMember(e.target.value)}
                   className="w-full px-3 py-2 border rounded-xl bg-white"
                 >
-                  <option value="1">Allu (Managing Partner)</option>
-                  <option value="2">Paru (Creative Director)</option>
-                  <option value="3">Kathu (Sourcing & Production)</option>
+                  <option value="1">Allu - Co-Founder & Chief Technology Officer (CTO)</option>
+                  <option value="2">Paru - Co-Founder & Creative Director</option>
+                  <option value="3">Kathu - Co-Founder & Social Media Manager</option>
                 </select>
               </div>
               <div>

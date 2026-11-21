@@ -47,14 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // ignore
       }
     }
-    return {
-      id: 1,
-      name: 'Allu',
-      email: 'allu@parvaii.com',
-      role: 'admin',
-      phone: '+91 98765 00001',
-      status: 'active',
-    };
+    return null;
   });
 
   // Persistent Drop Selection across all pages and reloads

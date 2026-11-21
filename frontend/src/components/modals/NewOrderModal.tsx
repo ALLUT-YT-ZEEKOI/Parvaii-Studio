@@ -233,8 +233,8 @@ export const NewOrderModal: React.FC = () => {
                 onChange={(e) => setReceivingAccount(e.target.value)}
                 className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white"
               >
-                <option value="1">HDFC Bank Current A/c (Balance: ₹12,500)</option>
-                <option value="2">Studio Cash Box (Balance: ₹3,743)</option>
+                <option value="1">HDFC Bank Current A/c</option>
+                <option value="2">Studio Cash Box</option>
               </select>
             </div>
           )}

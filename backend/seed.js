@@ -32,9 +32,9 @@ async function seed() {
     if (existingUsers === 0) {
       console.log('[Seed] Seeding Founding Partners...');
       await User.create([
-        { name: 'Allu', email: 'allu@parvaii.com', password: 'password', role: 'admin', phone: '+91 98765 00001', equity_percentage: 34, title: 'Managing Partner & Operations' },
-        { name: 'Paru', email: 'paru@parvaii.com', password: 'password', role: 'partner', phone: '+91 98765 00002', equity_percentage: 33, title: 'Creative Director & Styling' },
-        { name: 'Kathu', email: 'kathu@parvaii.com', password: 'password', role: 'partner', phone: '+91 98765 00003', equity_percentage: 33, title: 'Sourcing & Production Lead' },
+        { name: 'Allu', email: 'allu@parvaii.com', password: 'password', role: 'admin', phone: '+91 98765 00001', equity_percentage: 34, title: 'Co-Founder & Chief Technology Officer (CTO)' },
+        { name: 'Paru', email: 'paru@parvaii.com', password: 'password', role: 'partner', phone: '+91 98765 00002', equity_percentage: 33, title: 'Co-Founder & Creative Director' },
+        { name: 'Kathu', email: 'kathu@parvaii.com', password: 'password', role: 'partner', phone: '+91 98765 00003', equity_percentage: 33, title: 'Co-Founder & Social Media Manager' },
       ]);
     }
 

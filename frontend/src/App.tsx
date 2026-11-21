@@ -17,6 +17,7 @@ import { ReportsPage } from './pages/ReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { CollectionsPage } from './pages/CollectionsPage';
 import { LoginPage } from './pages/LoginPage';
+import { useAuth } from './context/AuthContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,15 +28,38 @@ const queryClient = new QueryClient({
   },
 });
 
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { token } = useAuth();
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
+};
+
+const LoginRoute: React.FC = () => {
+  const { token } = useAuth();
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
+  return <LoginPage />;
+};
+
 export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginRoute />} />
 
-            <Route path="/" element={<AppLayout />}>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
               <Route index element={<DashboardPage />} />
               <Route path="collections" element={<CollectionsPage />} />
               <Route path="orders" element={<OrdersPage />} />

@@ -36,9 +36,9 @@ export const AddExpenseModal: React.FC = () => {
   ];
 
   const members = [
-    { id: 1, name: 'Allu (Managing Partner)' },
-    { id: 2, name: 'Parvathy S. (Creative Director)' },
-    { id: 3, name: 'Aishwarya M. (Sourcing & Production)' },
+    { id: 1, name: 'Allu - Co-Founder & Chief Technology Officer (CTO)' },
+    { id: 2, name: 'Paru - Co-Founder & Creative Director' },
+    { id: 3, name: 'Kathu - Co-Founder & Social Media Manager' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -187,8 +187,8 @@ export const AddExpenseModal: React.FC = () => {
                 onChange={(e) => setCompanyAccountId(e.target.value)}
                 className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white"
               >
-                <option value="1">HDFC Bank Current A/c (Current: ₹12,500)</option>
-                <option value="2">Studio Cash Box (Current: ₹3,743)</option>
+                <option value="1">HDFC Bank Current A/c</option>
+                <option value="2">Studio Cash Box</option>
               </select>
             </div>
           )}
